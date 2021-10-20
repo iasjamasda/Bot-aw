@@ -2238,7 +2238,7 @@ Tema: ${voto[0].tema}\n\n${teks}`, extendedText, {contextInfo: { mentionedJid: [
 						const encmedia = isQuotedVideo ? JSON.parse(JSON.stringify(mek).replace('quotedM','m')).message.extendedTextMessage.contextInfo : mek
 						const media = await client.downloadAndSaveMediaMessage(encmedia)
 						ran = getRandom('.webp')
-						reply(mess.wait)
+						reply(`*Criando... ▬▬▬▬▭ 𝟫𝟤%*\n*Só use este comando caso o comando .STICKER não tenha funcionado*`)
 						await ffmpeg(`./${media}`)
 							.inputFormat(media.split('.')[1])
 							.on('start', function (cmd) {
