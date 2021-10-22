@@ -1272,32 +1272,32 @@ Tema: ${voto[0].tema}\n\n${teks}`, extendedText, {contextInfo: { mentionedJid: [
 						reply('Error')
 					}
 					break
-				case 'play':
-					try {
-						if( args.length < 1) return reply('*E o texto animal*')
-						reply('*🔍Procurando Música aguarde🔎*')
-						teks = body.slice(6)
-						musicres = await fetchJson(`http://brizas-api.herokuapp.com/sociais/v2/ytplaymp3?apikey=BOT%20SOPHIA&query=${teks}`)
-						datedmusic = musicres
-						dated = `*✅ Música encontrada ✅*\n*Titulo: ${musicres.titulo}*\n*Link: ${musicres.link_share}*\n*Duração: ${musicres.duration}*\n`
-						buff = await getBuffer(musicres.thumb)
-						await client.sendMessage(from, buff, image, {quoted: mek, caption: dated})
-						var dur = musicres.duration
-						if(dur > 360) return reply('*Apenas músicas com 6 minutos de duração*')
-						reply('*⬇️ Baixando música ⬇️*')
+					case 'play':
 						try {
-							buffmusic = await getBuffer(musicres.link_src)
-							await reply('*🥳🥳 Download completo, enviando... 🥳🥳*')
-							client.sendMessage(from, buffmusic, audio, {mimetype: Mimetype.mp4Audio, quoted: mek})
-						}
-						catch (e) {
+							if( args.length < 1) return reply('*E o texto animal*')
+							reply('*🔍Procurando Música aguarde🔎*')
+							teks = body.slice(6)
+							anu = await fetchJson(`http://brizas-api.herokuapp.com/sociais/youtubesrc?apikey=17desetembro&query=${teks}`)
+							date = anu.resultados[0]
+							dated = `*✅ Música encontrada ✅*\n*Titulo: ${date.title}*\n*Link: ${date.link}*\n*Duração: ${date.duration} segs*\n*Views: ${date.views}segs*\n*Canal:${date.channel.name}*`
+							buff = await getBuffer(date.thumbnail)
+							await client.sendMessage(from, buff, image, {quoted: mek, caption: dated})
+							var dur = date.duration
+							if(dur > 360) return reply('*Apenas músicas com 6 minutos de duração*')
+							reply('*⬇️ Baixando música ⬇️*')
+							try {
+								anumusic = await fetchJson(`http://brizas-api.herokuapp.com/sociais/ytmp3?apikey=17desetembro&url=${date.link}`)
+								buffmusic = await getBuffer(anumusic.link)
+								await reply('*🥳🥳 Download completo, enviando... 🥳🥳*')
+								client.sendMessage(from, buffmusic, audio, {quoted: mek, mimetype: Mimetype.mp4Audio})
+							}
+							catch {
+								reply('*❌ Falha ao baixar áudio ❌*')
+							}
+						} catch (e){
 							console.log(e)
-							reply('*❌ Falha ao baixar áudio ❌*')
+							reply('Error')
 						}
-					} catch (e){
-						console.log(e)
-						reply('Error')
-					}
 					break
 				case 'blacklist':
 					try{
