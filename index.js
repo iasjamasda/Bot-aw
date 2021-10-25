@@ -91,6 +91,7 @@ const getLevelingPosition = (userid) => {
         return position
     }
 }
+
 const getLevelingLevel = (userid) => {
     let position = false
     Object.keys(_level).forEach((i) => {
@@ -146,21 +147,6 @@ const getLevelingPatent = (userid) => {
     }
 }
 
-const rmLevelingId = (userid) => {
-    let position = false
-    Object.keys(_level).forEach((i) => {
-        if (_level[i].id === userid) {
-            position = i
-        }
-    })
-    if (position !== false) {
-        _level.splice(position, 1)
-        fs.writeFileSync('./src/database/level.json', JSON.stringify(_level, null, 2) + '\n')
-		return true
-    } else {
-		return false
-	}
-}
 
 
 const addLevelingLevel = async (userid, amount) => {
@@ -175,18 +161,6 @@ const addLevelingLevel = async (userid, amount) => {
         fs.writeFileSync('./src/database/level.json', JSON.stringify(_level, null, 2) + '\n')
     }
 }
-const rmLevelingLevel = (userid, amount) => {
-    let position = false
-    Object.keys(_level).forEach((i) => {
-        if (_level[i].id === userid) {
-            position = i
-        }
-    })
-    if (position !== false) {
-        _level[position].level -= amount
-        fs.writeFileSync('./src/database/level.json', JSON.stringify(_level, null, 2) + '\n')
-    }
-}
 
 const addLevelingXp = async (sender, amount) => {
 	let position = false
@@ -197,18 +171,6 @@ const addLevelingXp = async (sender, amount) => {
 	})
 	if (position !== false) {
 		_level[position].xp += amount
-		fs.writeFileSync('./src/database/level.json', JSON.stringify(_level, null, 2) + '\n')
-	}
-}
-const rmLevelingXp = (sender, amount) => {
-	let position = false
-	Object.keys(_level).forEach((i) => {
-		if (_level[i].id === sender) {
-			position = i
-		}
-	})
-	if (position !== false) {
-		_level[position].xp = _level[position].xp - amount
 		fs.writeFileSync('./src/database/level.json', JSON.stringify(_level, null, 2) + '\n')
 	}
 }
@@ -1277,17 +1239,16 @@ Tema: ${voto[0].tema}\n\n${teks}`, extendedText, {contextInfo: { mentionedJid: [
 							if( args.length < 1) return reply('*E o texto animal*')
 							reply('*🔍Procurando Música aguarde🔎*')
 							teks = body.slice(6)
-							anu = await fetchJson(`http://brizas-api.herokuapp.com/sociais/youtubesrc?apikey=17desetembro&query=${teks}`)
-							date = anu.resultados[0]
-							dated = `*✅ Música encontrada ✅*\n*Titulo: ${date.title}*\n*Link: ${date.link}*\n*Duração: ${date.duration} segs*\n*Views: ${date.views}segs*\n*Canal:${date.channel.name}*`
-							buff = await getBuffer(date.thumbnail)
+							anu = await fetchJson(`http://brizas-api.herokuapp.com/sociais/ytplaymp3?apikey=BOT%20SOPHIA&query=${teks}`)
+							date = anu
+							dated = `*✅ Música encontrada ✅*\n*Titulo: ${date.titulo}*\n*Link: ${date.link_share}*\n*Duração: ${date.duration} segs*\n*Views: ${date.views}segs*\n*Canal:${date.canal.name}*`
+							buff = await getBuffer(date.thumb)
 							await client.sendMessage(from, buff, image, {quoted: mek, caption: dated})
 							var dur = date.duration
-							if(dur > 360) return reply('*Apenas músicas com 6 minutos de duração*')
+							if(dur > 6) return reply('*Apenas músicas com 6 minutos de duração*')
 							reply('*⬇️ Baixando música ⬇️*')
 							try {
-								anumusic = await fetchJson(`http://brizas-api.herokuapp.com/sociais/ytmp3?apikey=17desetembro&url=${date.link}`)
-								buffmusic = await getBuffer(anumusic.link)
+								buffmusic = await getBuffer(date.audio_src)
 								await reply('*🥳🥳 Download completo, enviando... 🥳🥳*')
 								client.sendMessage(from, buffmusic, audio, {quoted: mek, mimetype: Mimetype.mp4Audio})
 							}
