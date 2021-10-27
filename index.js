@@ -1239,16 +1239,16 @@ Tema: ${voto[0].tema}\n\n${teks}`, extendedText, {contextInfo: { mentionedJid: [
 							if( args.length < 1) return reply('*E o texto animal*')
 							reply('*🔍Procurando Música aguarde🔎*')
 							teks = body.slice(6)
-							anu = await fetchJson(`http://brizas-api.herokuapp.com/sociais/ytplaymp3?apikey=BOT%20SOPHIA&query=${teks}`)
-							date = anu
-							dated = `*✅ Música encontrada ✅*\n*Titulo: ${date.titulo}*\n*Link: ${date.link_share}*\n*Duração: ${date.duration} segs*\n*Views: ${date.views}segs*\n*Canal:${date.canal.name}*`
-							buff = await getBuffer(date.thumb)
+							anu = await fetchJson(`https://api.zeks.me/api/ytplaymp3?apikey=apivinz&q=${teks}`)
+							date = anu.result
+							dated = `*✅ Música encontrada ✅*\n*Titulo: ${date.title}*\n*Link: ${date.source}*\n*Duração: ${date.duration}*`
+							buff = await getBuffer(date.thumbnail)
 							await client.sendMessage(from, buff, image, {quoted: mek, caption: dated})
 							var dur = date.duration
 							if(dur > 6) return reply('*Apenas músicas com 6 minutos de duração*')
 							reply('*⬇️ Baixando música ⬇️*')
 							try {
-								buffmusic = await getBuffer(date.audio_src)
+								buffmusic = await getBuffer(date.url_audio)
 								await reply('*🥳🥳 Download completo, enviando... 🥳🥳*')
 								client.sendMessage(from, buffmusic, audio, {quoted: mek, mimetype: Mimetype.mp4Audio})
 							}
