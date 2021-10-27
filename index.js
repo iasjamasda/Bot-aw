@@ -40,6 +40,7 @@ const { exit, on } = require('process')
 const { type } = require('os')
 const {stickerImgTag, stickerVidTag, addExif } = require('./lib/sticker')
 const { welcometxt } = require('./welcometext')
+const ytdl = require('ytdl-core');
 const sticker_pack = JSON.parse(fs.readFileSync('./src/database/sticker_pack.json'))
 const antilink = JSON.parse(fs.readFileSync('./src/database/antilink.json'))
 const antilinkhard = JSON.parse(fs.readFileSync('./src/database/antilinkhard.json'))
@@ -1239,16 +1240,17 @@ Tema: ${voto[0].tema}\n\n${teks}`, extendedText, {contextInfo: { mentionedJid: [
 							if( args.length < 1) return reply('*E o texto animal*')
 							reply('*🔍Procurando Música aguarde🔎*')
 							teks = body.slice(6)
-							anu = await fetchJson(`https://api.zeks.me/api/ytplaymp3?apikey=apivinz&q=${teks}`)
-							date = anu.result
-							dated = `*✅ Música encontrada ✅*\n*Titulo: ${date.title}*\n*Link: ${date.source}*\n*Duração: ${date.duration}*`
+							anu = await fetchJson(`http://brizas-api.herokuapp.com/sociais/youtubesrc?apikey=BOT SOPHIA&query=${teks}`)
+							date = anu.resultados[0]
+							dated = `*✅ Música encontrada ✅*\n*Titulo: ${date.title}*\n*Link: ${date.link}*\n*Duração: ${date.duration} segs*\n*Views: ${date.views}segs*\n*Canal:${date.channel.name}*`
 							buff = await getBuffer(date.thumbnail)
 							await client.sendMessage(from, buff, image, {quoted: mek, caption: dated})
 							var dur = date.duration
-							if(dur > 6) return reply('*Apenas músicas com 6 minutos de duração*')
+							if(dur > 360) return reply('*Apenas músicas com 6 minutos de duração*')
 							reply('*⬇️ Baixando música ⬇️*')
 							try {
-								buffmusic = await getBuffer(date.url_audio)
+								anumusic = await fetchJson(`http://brizas-api.herokuapp.com/sociais/ytmp3?apikey=BOT SOPHIA&url=${date.link}`)
+								buffmusic = await getBuffer(anumusic.link)
 								await reply('*🥳🥳 Download completo, enviando... 🥳🥳*')
 								client.sendMessage(from, buffmusic, audio, {quoted: mek, mimetype: Mimetype.mp4Audio})
 							}
