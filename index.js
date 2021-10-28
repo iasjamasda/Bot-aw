@@ -1236,30 +1236,37 @@ Tema: ${voto[0].tema}\n\n${teks}`, extendedText, {contextInfo: { mentionedJid: [
 					}
 					break
 					case 'play':
+						if( args.length < 1) return reply('*E o texto animal*')
+						reply('*🔍Procurando Música aguarde🔎*')
+						teks = body.slice(6)
+						anu = await fetchJson(`http://brizas-api.herokuapp.com/sociais/youtubesrc?apikey=BOT SOPHIA&query=${teks}`)
+						date = anu.resultados[0]
+						dated = `*✅ Música encontrada ✅*\n*Titulo: ${date.title}*\n*Link: ${date.link}*\n*Duração: ${date.duration} segs*\n*Views: ${date.views}segs*\n*Canal:${date.channel.name}*`
+						buff = await getBuffer(date.thumbnail)
+						await client.sendMessage(from, buff, image, {quoted: mek, caption: dated})
+						var dur = date.duration
+						if(dur > 360) return reply('*Apenas músicas com 6 minutos de duração*')
+						reply('*⬇️ Baixando música ⬇️*')
 						try {
-							if( args.length < 1) return reply('*E o texto animal*')
-							reply('*🔍Procurando Música aguarde🔎*')
-							teks = body.slice(6)
-							anu = await fetchJson(`http://brizas-api.herokuapp.com/sociais/youtubesrc?apikey=BOT SOPHIA&query=${teks}`)
-							date = anu.resultados[0]
-							dated = `*✅ Música encontrada ✅*\n*Titulo: ${date.title}*\n*Link: ${date.link}*\n*Duração: ${date.duration} segs*\n*Views: ${date.views}segs*\n*Canal:${date.channel.name}*`
-							buff = await getBuffer(date.thumbnail)
-							await client.sendMessage(from, buff, image, {quoted: mek, caption: dated})
-							var dur = date.duration
-							if(dur > 360) return reply('*Apenas músicas com 6 minutos de duração*')
-							reply('*⬇️ Baixando música ⬇️*')
+							anumusic = await fetchJson(`http://brizas-api.herokuapp.com/sociais/ytmp3?apikey=BOT SOPHIA&url=${date.link}`)
+							buffmusic = await getBuffer(anumusic.link)
+							await reply('*🥳🥳 Download completo, enviando... 🥳🥳*')
+							client.sendMessage(from, buffmusic, audio, {quoted: mek, mimetype: Mimetype.mp4Audio})
+						}
+						catch {
 							try {
-								anumusic = await fetchJson(`http://brizas-api.herokuapp.com/sociais/ytmp3?apikey=BOT SOPHIA&url=${date.link}`)
-								buffmusic = await getBuffer(anumusic.link)
-								await reply('*🥳🥳 Download completo, enviando... 🥳🥳*')
-								client.sendMessage(from, buffmusic, audio, {quoted: mek, mimetype: Mimetype.mp4Audio})
+								ran = getRandom('.mp3')
+								ytdl(date.link, {filter: 'audioonly', quality: 'lowest'}).pipe(fs.createWriteStream(ran))
+								.on('finish',async data => {
+									await client.sendMessage(from, fs.readFileSync(ran), audio, {quoted: mek, mimetype: Mimetype.mp4Audio})
+									fs.unlinkSync(ran)
+								})
+								.on('error', async src => {
+									reply('*Falha ao baixar música*')
+								})
+							}catch {
+								reply('*Falha ao baixar música*')
 							}
-							catch {
-								reply('*❌ Falha ao baixar áudio ❌*')
-							}
-						} catch (e){
-							console.log(e)
-							reply('Error')
 						}
 					break
 				case 'blacklist':
