@@ -29,6 +29,10 @@ Como Usar: Envie .attp + O Texto que você quer transformar em figurinha
 Função: converter imagem / gif / vídeo em figurinha sem alterar o tamanho
 Como Usar: Envie a imagem,gif ou vídeo marque ele e responda com o comando .fsticker
 
+❑ .togif ou .togif ❑
+Função: converter sticker em gif
+Como Usar: Envie um sticker marque ele e responda com o comando .togif
+
 🎧 COMANDOS DE ÁUDIO/MÚSICAS 🎧
 
 ❑ .play ❑
