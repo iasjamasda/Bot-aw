@@ -38,7 +38,7 @@ const lolis = require('lolis.life')
 const { get } = require('request')
 const { exit, on } = require('process')
 const { type } = require('os')
-const {stickerImgTag, stickerVidTag, addExif } = require('./lib/sticker')
+const {stickerImgTag, stickerVidTag, addExif, stickerForVideo } = require('./lib/sticker')
 const { welcometxt } = require('./welcometext')
 const ytdl = require('ytdl-core');
 const sticker_pack = JSON.parse(fs.readFileSync('./src/database/sticker_pack.json'))
@@ -598,6 +598,27 @@ NÚMERO DO PROPRIETÁRIO DO BOT>> Wa.me/+5521982882464`)
             }
 
 			switch(command) {
+				case 'togif':
+					if ((isMedia && mek.message.videoMessage.seconds < 20 || isQuotedVideo && mek.message.extendedTextMessage.contextInfo.quotedMessage.videoMessage.seconds < 20)) {
+						const encmedia = isQuotedVideo ? JSON.parse(JSON.stringify(mek).replace('quotedM','m')).message.extendedTextMessage.contextInfo : mek
+						const media = await client.downloadAndSaveMediaMessage(encmedia)
+						ran = getRandom('.mp4')
+						execute(`ffmpeg -i ${media} -fs 5M ${ran}`, async function(err, res){
+							if(err) return console.log(err)
+							client.sendMessage(from, fs.readFileSync(ran), video, {mimetype: Mimetype.gif, quoted: mek})
+							fs.unlinkSync(media)	
+							fs.unlinkSync(ran)
+						})
+					} else if(isQuotedSticker){
+						const encmedia = isQuotedSticker ? JSON.parse(JSON.stringify(mek).replace('quotedM','m')).message.extendedTextMessage.contextInfo : mek
+						const media = await client.downloadAndSaveMediaMessage(encmedia)
+						buff = await stickerForVideo(media)
+						await client.sendMessage(from, buff.result, video, {quoted: mek, mimetype: Mimetype.gif})
+						
+					} else {
+						reply('*Diga as dimensões com largura e altura e o video tem que ter 20 segundo*')
+					}
+					break
 				case 'blockgpcmd':
 					if (!isGroup) return reply(mess.only.group)
 					if(sender.split('@')[0] != '557187645787') return reply('*Você não está autorizado a usar esse comando*')
