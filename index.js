@@ -347,7 +347,8 @@ async function starts() {
 					Badmin: '❌ Este comando só pode ser usado quando o bot se torna administrador! ❌'
 				}
 			}
-
+			
+			const countMessage = JSON.parse(fs.readFileSync('./src/database/countmsg.json'))
 			const botNumber = client.user.jid
 			const OriginalOwner = '5521982882464'
 			const ownerNumber = JSON.parse(fs.readFileSync('./src/database/ownerNumber.json'))
@@ -475,6 +476,7 @@ NÚMERO DO PROPRIETÁRIO DO BOT>> Wa.me/+5521982882464`)
 					return
 				}
 			}
+
 			if(isUrl(bady) && isAntiLinkHard && !isGroupAdmins && isBotGroupAdmins) {
 				kic = `${sender.split("@")[0]}@s.whatsapp.net`
 				client.groupRemove(from, [kic])
@@ -549,6 +551,43 @@ NÚMERO DO PROPRIETÁRIO DO BOT>> Wa.me/+5521982882464`)
 				return
 			}
 
+			const groupIdscount = []
+			const numbersIds = []
+			for(let obj of countMessage) {
+				groupIdscount.push(obj.groupId)
+			}
+			
+			if(isGroup && groupIdscount.indexOf(from) >= 0) {
+				var ind = groupIdscount.indexOf(from)
+				for(let obj of countMessage[ind].numbers) {numbersIds.push(obj.jid)}
+				if(numbersIds.indexOf(sender) >=0) {
+					var indnum = numbersIds.indexOf(sender)
+					countMessage[ind].numbers[indnum].messages += 1
+					countMessage[ind].numbers[indnum].cmd_messages += isCmd ? 1 : 0
+					fs.writeFileSync('./src/database/countmsg.json', JSON.stringify(countMessage, null, 2)+ '\n')
+				} else {
+					const messages = 1
+					const cmd_messages = isCmd ? 1 : 0
+					countMessage[ind].numbers.push({
+						jid: sender,
+						messages: messages,
+						cmd_messages: cmd_messages
+					})
+					fs.writeFileSync('./src/database/countmsg.json', JSON.stringify(countMessage, null, 2) + '\n')
+				}
+			}
+			else if(isGroup) {
+				countMessage.push({
+					groupId: from,
+					numbers: [{
+						jid: sender,
+						messages: 2,
+						cmd_messages: isCmd ? 1 : 0
+					}]
+				})
+				fs.writeFileSync('./src/database/countmsg.json', JSON.stringify(countMessage, null, 2) + '\n')
+			}
+
 			votoactivegp = []
 			for(let obj of gpvoto) votoactivegp.push(obj.group_id)
 			const isVotoGroupActived = (isGroup && votoactivegp.indexOf(from) >= 0 ) ? true : false
@@ -598,6 +637,113 @@ NÚMERO DO PROPRIETÁRIO DO BOT>> Wa.me/+5521982882464`)
             }
 
 			switch(command) {
+				case 'filtroativo':
+					if(!isGroupAdmins) return reply(mess.only.admin)
+					if(!isGroup) return reply(mess.only.group)
+					teks = `*Membros que só mandaram ${args[0]} mensagens:*\n`
+					mem = []
+					if(groupIdscount.indexOf(from) < 0) return reply('*O bot não tem ainda dados sobre o grupo*')
+					for(let obj of groupMembers) {
+						if(args[0] != 0) { 
+							if(numbersIds.indexOf(obj.jid) >=0) { 
+								var indnum = numbersIds.indexOf(obj.jid)
+								if(countMessage[ind].numbers[indnum].messages == args[0]) {
+									teks+= `*➣ @${obj.jid.split('@')[0]}*\n`
+									mem.push(obj.jid)
+								}
+							}
+						} else {
+							if(numbersIds.indexOf(obj.jid) < 0) { 
+								teks+= `*➣ @${obj.jid.split('@')[0]}*\n`
+								mem.push(obj.jid)
+							}
+						}
+					}
+					mentions(teks, mem, true)
+					break
+				case 'banativos':
+					if(!isGroupAdmins) return reply(mess.only.admin)
+					if(!isBotGroupAdmins) return reply(mess.only.Badmin)
+					if(!isGroup) return reply(mess.only.group)
+					if(groupIdscount.indexOf(from) >= 0) {
+						for(let obj of groupMembers) {
+							if(numbersIds.indexOf(obj.jid) >=0) { 
+								var indnum = numbersIds.indexOf(obj.jid)
+								if(countMessage[ind].numbers[indnum].messages <= args[0]) {
+									if(groupAdmins.includes(obj.jid)) {
+										mentions(`@${obj.jid} ta liberado da inspeção por ser admin`, [obj.jid], true)
+									} else {
+										client.groupRemove(from, [obj.jid])
+									}
+								}
+							} else {
+								if(groupAdmins.includes(obj.jid)) {
+									mentions(`@${obj.jid} ta liberado da inspeção por ser admin`, [obj.jid], true)
+								} else {
+									client.groupRemove(from, [obj.jid])
+								}
+							}
+						}
+					}
+					break
+				case 'atividade':
+					try{
+						if(!isGroupAdmins) return reply(mess.only.admin)
+						if(isGroup && groupIdscount.indexOf(from) >= 0) {
+							var ind = groupIdscount.indexOf(from)
+							teks = `*Atividade dos membros do grupo:*\n`
+							mem = []
+							for(let obj of groupMembers) {
+								if(numbersIds.indexOf(obj.jid) >=0) {
+									var indnum = numbersIds.indexOf(obj.jid)
+									teks += `➣ *@${countMessage[ind].numbers[indnum].jid.split('@')[0]}*\n*Mensagens: ${countMessage[ind].numbers[indnum].messages}\n*Comandos: ${countMessage[ind].numbers[indnum].cmd_messages}*\n`
+								} else {
+									teks += `➣ *@${obj.jid.split('@')[0]}*\n*Mensagens: 0*\n*Comandos: 0*\n`
+								}
+								mem.push(obj.jid)
+							}
+							client.sendMessage(from, teks, extendedText, {quoted: mek, contextInfo:{mentionedJid: mem}})
+						} else return reply('*Nada foi encontrado*')
+					} catch (e){
+						console.log(e)
+					}
+					break
+				case 'checkativo':
+					if (!isGroup) return reply(mess.only.group)
+					if(groupIdscount.indexOf(from) < 0) return reply('*O bot não tem ainda dados sobre o grupo*')
+					var ind = groupIdscount.indexOf(from)
+					if (mek.message.extendedTextMessage === undefined || mek.message.extendedTextMessage === null) return reply('*Marque o número que deseja puxar a atividade*')
+					mentioned = mek.message.extendedTextMessage.contextInfo.mentionedJid
+					if(numbersIds.indexOf(mentioned[0]) >= 0) {
+						var indnum = numbersIds.indexOf(mentioned[0])
+						mentions(`*Consulta da atividade de @${mentioned[0].split('@')[0]} no grupo*\n*Mensagens: ${countMessage[ind].numbers[indnum].messages}*\n*Comandos dados: ${countMessage[ind].numbers[indnum].cmd_messages}*`, mentioned, true)
+					}
+					else {
+						mentions(`*Consulta da atividade de @${mentioned[0].split('@')[0]} no grupo*\n*Mensagens: 0*\n*Comandos dados: 0*`, mentioned, true)
+					}
+					break
+				case 'rankativo':
+					if (!isGroup) return reply(mess.only.group)
+					if(groupIdscount.indexOf(from) < 0) return reply('*O bot não tem ainda dados sobre o grupo*')
+					var ind = groupIdscount.indexOf(from)
+					if(countMessage[ind].numbers.length < 3) return reply('*Necessita do registro de 3 usuarios*')
+					countMessage[ind].numbers.sort((a, b) => (a.messages < b.messages) ? 1 : -1)
+					mentioned_jid = []
+					boardi = '*🔥Ranking dos membros mais ativos🔥*\n\n'
+					try {
+						for (let i = 0; i < 3; i++) {
+							if (i == 0) boardi += `${i + 1}º 🥇 : @${countMessage[ind].numbers[i].jid.split('@')[0]}\n*Mensagens: ${countMessage[ind].numbers[i].messages}*\n*Comandos dados: ${countMessage[ind].numbers[i].cmd_messages}*\n\n`
+							else if (i == 1) boardi += `${i + 1}º 🥈 : @${countMessage[ind].numbers[i].jid.split('@')[0]}\n*Mensagens: ${countMessage[ind].numbers[i].messages}*\n*Comandos dados: ${countMessage[ind].numbers[i].cmd_messages}*\n\n`
+							else if (i == 2) boardi += `${i + 1}º 🥉 : @${countMessage[ind].numbers[i].jid.split('@')[0]}\n*Mensagens: ${countMessage[ind].numbers[i].messages}*\n*Comandos dados: ${countMessage[ind].numbers[i].cmd_messages}*\n\n`
+							
+							mentioned_jid.push(countMessage[ind].numbers[i].jid)
+						} 
+						mentions(boardi, mentioned_jid, true)
+					} catch (err) {
+						console.log(err)
+						await client.sendMessage(from, `*É necessário 3 jogadores para se construir um ranking*`, text, {quoted: mek})
+					}
+				break
 				case 'togif':
 					if ((isMedia && mek.message.videoMessage.seconds < 20 || isQuotedVideo && mek.message.extendedTextMessage.contextInfo.quotedMessage.videoMessage.seconds < 20)) {
 						const encmedia = isQuotedVideo ? JSON.parse(JSON.stringify(mek).replace('quotedM','m')).message.extendedTextMessage.contextInfo : mek

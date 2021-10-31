@@ -41,7 +41,9 @@
     "request": "^2.81.0",
     "scrape-youtube": "^2.1.9",
     "spinnies": "^0.5.1",
-    "translatte": "^2.5.8"
+    "translatte": "^2.5.8",
+    "ytdl": "^1.4.1",
+    "ytdl-core": "^4.9.1"
   },
   "repository": {
     "type": "git",

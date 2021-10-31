@@ -7,6 +7,43 @@ const help = (prefix) => {
 Função: Consulta o seus dados ou de outras pessoas
 Como Usar: .level (marque alguém ou n/a)
 
+⚙️ BLOQUEIO DE COMANDOS DE GRUPO ⚙️
+
+❑ .blockgpcmd ❑
+Função: Ativa o bloqueio de comandos no grupo
+Como Usar: .blockgpcmd 1/0
+
+❑ .addblockgpcmd ❑
+Função: Bloqueia o comando no grupo
+Como Usar: .addblockgpcmd (cmd)
+
+❑ .rmblockgpcmd ❑
+Função: Desbloqueia o comando no grupo
+Como Usar: .rmblockgpcmd (cmd)
+
+❑ .blockgpcmdlist ❑
+Função: Lista comandos bloqueados no grupo 
+
+👤 ATIVIDADE DE MEMBROS 👤
+
+❑ .rankativo ❑
+Função: Rankea pessoas mais ativas do grupo
+
+❑ .checkativo ❑
+Função: Consulta a atividade de um membro do grupo
+Como Usar: .checkativo (marque alguém)
+
+❑ .atividade ❑
+Função: Lista a atividade de todos os membros do grupo
+
+❑ .banativos ❑
+Função: Bane membros de uma certa qnt pra baixo
+Como Usar: .banativos (qnt de msg)
+
+❑ .filtroativo ❑
+Função: Filtra atividades de membros de uma certa qnt pra baixo
+Como Usar: .filtroativo (qnt de msg)
+
 🔥 ❑ COMANDOS PARA FIGURINHAS ❑ 🔥 
 
 ❑ .sticker ou .stiker ❑
