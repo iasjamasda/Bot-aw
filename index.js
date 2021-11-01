@@ -539,6 +539,7 @@ NÚMERO DO PROPRIETÁRIO DO BOT>> Wa.me/+5521982882464`)
 			for(let obj of bye_group) groupIdBye.push(obj.jid)
 			const isByed = (groupIdBye.indexOf(from) >= 0) ? true : false
 
+			
 			const blockCmdGroupJids = []
 			for(let obj of blockgpcmd) blockCmdGroupJids.push(obj.jid)
 			if(isGroup && blockCmdGroupJids.indexOf(from) < 0) {
@@ -767,7 +768,7 @@ NÚMERO DO PROPRIETÁRIO DO BOT>> Wa.me/+5521982882464`)
 					break
 				case 'blockgpcmd':
 					if (!isGroup) return reply(mess.only.group)
-					if(sender.split('@')[0] != '5521982882464') return reply('*Você não está autorizado a usar esse comando*')
+					if(!isOwner) return reply(mess.only.ownerB)
 					if(args.length < 1) return reply('*Escreva o comando que deseja bloquear*')
 					if (Number(args[0]) === 1) {
 						if (isBlockedCmdGp) return reply('Ja esta ativo')
@@ -784,7 +785,7 @@ NÚMERO DO PROPRIETÁRIO DO BOT>> Wa.me/+5521982882464`)
                     break
 				case 'addblockgpcmd':
 					if(!isGroup) return reply(mess.only.group)
-					if(sender.split('@')[0] != '5521982882464') return reply('*Você não está autorizado a usar esse comando*')
+					if(!isOwner) return reply(mess.only.ownerB)
 					if(args.length < 1) return reply('*Escreva o comando que deseja bloquear*')
 					posblockcmdgp = blockCmdGroupJids.indexOf(from)
 					if(posblockcmdgp < 0) return reply('Esse grupo não está cadastrado ainda')
@@ -794,7 +795,7 @@ NÚMERO DO PROPRIETÁRIO DO BOT>> Wa.me/+5521982882464`)
 					break
 				case 'rmblockgpcmd':
 					if(!isGroup) return reply(mess.only.group)
-					if(sender.split('@')[0] != '5521982882464') return reply('*Você não está autorizado a usar esse comando*')
+					if(!isOwner) return reply(mess.only.ownerB)
 					if(args.length < 1) return reply('*Escreva o comando que deseja desbloquear*')
 					posblockcmdgp = blockCmdGroupJids.indexOf(from)
 					if(posblockcmdgp < 0) return reply('Esse grupo não está cadastrado ainda')
