@@ -196,7 +196,7 @@ function dataAtualFormatada(){
 }
 async function starts() {
 	const client = new WAConnection()
-	client.version = [2, 2121, 7]
+	client.version = [2,2142,12]
 	client.logger.level = 'warn'
 	console.log(banner.string)
 	client.on('qr', () => {
