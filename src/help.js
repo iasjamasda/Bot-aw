@@ -76,6 +76,10 @@ Como Usar: Envie um sticker marque ele e responda com o comando .togif
 Função: procura e baixa músicas do youtube
 Como Usar: .play + o título exato do vídeo que você quer a música
 
+❑ .playv2 ❑
+Função: procura e baixa músicas do youtube
+Como Usar: .playv2 + o título exato do vídeo que você quer a música
+
 ❑ .ytmp3 ❑
 Função: baixa músicas de vídeos do YouTube através do Link do vídeo
 Como Usar: Envie .ytmp3 + link do vídeo

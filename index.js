@@ -69,6 +69,44 @@ prefix = '.'
 blocked = []
 isAvised = []
 
+async function ytDownlodMp3(url) {
+	return new Promise((resolve, reject) => {
+	  try {
+		const id = ytdl.getVideoID(url)
+		const yutub = ytdl.getInfo(`https://www.youtube.com/watch?v=${id}`)
+		.then((data) => {
+		  let pormat = data.formats
+		  let audio = []
+		  for (let i = 0; i < pormat.length; i++) {
+			if (pormat[i].mimeType == 'audio/webm; codecs=\"opus\"') {
+			  let aud = pormat[i]
+			  audio.push(aud.url)
+			}
+		  }
+		  const title = data.player_response.microformat.playerMicroformatRenderer.title.simpleText
+		  const thumb = data.player_response.microformat.playerMicroformatRenderer.thumbnail.thumbnails[0].url
+		  const channel = data.player_response.microformat.playerMicroformatRenderer.ownerChannelName
+		  const views = data.player_response.microformat.playerMicroformatRenderer.viewCount
+		  const published = data.player_response.microformat.playerMicroformatRenderer.publishDate
+  
+		  const result = {
+			title: title,
+			thumb: thumb,
+			channel: channel,
+			published: published,
+			views: views,
+			url: audio[1]
+		  }
+		  return(result)
+		})
+		resolve(yutub)
+	  } catch (error) {
+		  reject(error);
+		}
+		console.log(error)
+	})
+  }
+
 const getLevelingXp = (userid) => {
     let position = false
     Object.keys(_level).forEach((i) => {
@@ -1422,20 +1460,30 @@ Tema: ${voto[0].tema}\n\n${teks}`, extendedText, {contextInfo: { mentionedJid: [
 							client.sendMessage(from, buffmusic, audio, {quoted: mek, mimetype: Mimetype.mp4Audio})
 						}
 						catch {
-							try {
-								ran = getRandom('.mp3')
-								ytdl(date.link, {filter: 'audioonly', quality: 'lowest'}).pipe(fs.createWriteStream(ran))
-								.on('finish',async data => {
-									await client.sendMessage(from, fs.readFileSync(ran), audio, {quoted: mek, mimetype: Mimetype.mp4Audio})
-									fs.unlinkSync(ran)
-								})
-								.on('error', async src => {
-									reply('*Falha ao baixar música*')
-								})
-							}catch {
-								reply('*Falha ao baixar música*')
-							}
+							reply('*Falha ao baixar música, instale por meio do playv2*')
 						}
+					break
+				case 'playv2':
+					if( args.length < 1) return reply('*E o texto animal*')
+						reply('*🔍Procurando Música aguarde🔎*')
+						teks = body.slice(8)
+						anu = await fetchJson(`http://brizas-api.herokuapp.com/sociais/youtubesrc?apikey=BOT SOPHIA&query=${teks}`)
+						date = anu.resultados[0]
+						dated = `*✅ Música encontrada ✅*\n*Titulo: ${date.title}*\n*Link: ${date.link}*\n*Duração: ${date.duration} segs*\n*Views: ${date.views}segs*\n*Canal:${date.channel.name}*`
+						buff = await getBuffer(date.thumbnail)
+						await client.sendMessage(from, buff, image, {quoted: mek, caption: dated})
+						var dur = date.duration
+						if(dur > 360) return reply('*Apenas músicas com 6 minutos de duração*')
+						reply('*⬇️ Baixando música ⬇️*')
+					try {
+						ytDownlodMp3(date.link).then(async res => {
+							buffmusic = await getBuffer(res.url)
+							await reply('*🥳🥳 Download completo, enviando... 🥳🥳*')
+							client.sendMessage(from, buffmusic, audio, {quoted: mek, mimetype: Mimetype.mp4Audio})
+						})
+					} catch {
+
+					}
 					break
 				case 'blacklist':
 					try{
