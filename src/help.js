@@ -174,6 +174,13 @@ Como Usar: .rmowner (número sem +, - e espaço)
 
 🔥 Brincadeiras 🔥
 
+❑ .randomship ❑
+Função: shippa duas pessoas aleatoriamente
+
+❑ .ship ❑
+Função: Mostra a probabilidade de namoro
+Como usar: .ship (marcar1) (marcar2)
+
 ❑ .gay ❑
 Função: O Bot diz quanto porcento um membro do grupo é gay
 Como Usar: Envie .gay e marque a pessoa que deseja

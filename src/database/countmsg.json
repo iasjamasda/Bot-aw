@@ -1,1 +1,17 @@
-[]
+[
+  {
+    "groupId": "552799013169-1613658068@g.us",
+    "numbers": [
+      {
+        "jid": "5511930758170@s.whatsapp.net",
+        "messages": 5,
+        "cmd_messages": 0
+      },
+      {
+        "jid": "5511946817667@s.whatsapp.net",
+        "messages": 6,
+        "cmd_messages": 0
+      }
+    ]
+  }
+]

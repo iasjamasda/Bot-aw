@@ -676,6 +676,65 @@ NÚMERO DO PROPRIETÁRIO DO BOT>> Wa.me/+5521982882464`)
             }
 
 			switch(command) {
+				case 'ship':
+					try {
+					buff = await getBuffer('https://arqaparecida.org.br/assets/img/arq_noticia/282.jpg')
+					r = Math.floor(Math.random() * 100 + 0)
+					if(args.length < 1) reply('*ATA, AGORA É POSSÍVEL SHIPAR FANTASMAS*')
+					if(args.length< 2) reply('*NINGUÉM MERECER SER SHIPADO SOZINHO NÉ*')
+					num1 = args[0]
+					if(!isNaN(num1.slice(1)))
+					{
+						if(num1.startsWith('@')) {num1 = num1.slice(1)+'@s.whatsapp.net'}
+					}
+					if(num1.slice(0, -15) == '') { num1 = num1+'@s.whatsapp.net'}
+
+					num2 = args[1]
+					if(!isNaN(num2.slice(1)))
+					{
+						if(num2.startsWith('@')) {num2 = num2.slice(1)+'@s.whatsapp.net'}
+					}
+					if(num2.slice(0, -15) == '') { num2 = num2+'@s.whatsapp.net'}
+					reply('*⌛Buscando dados na máquina do tempo, aguarde...⌛*')
+					setTimeout(async function(){
+						client.sendMessage(from, buff, image, {caption: `✅ *RESULTADOS OBTIDOS* ✅\n*CHANCES DE NAMORO ENTRE @${num1.slice(0, -15)} E @${num2.slice(0, -15)}* \n*SÃO DE: ${r}%*`, quoted: mek, contextInfo: { "mentionedJid": [num1, num2]}})
+					}, 3000)
+					} catch {
+						reply('Error')
+						}
+					break
+				case 'randomship':
+					try{
+						buff = await getBuffer('https://arqaparecida.org.br/assets/img/arq_noticia/282.jpg')
+						if(!isGroup) return reply(mess.only.group)
+						r1 = Math.floor(Math.random() * groupMetadata.participants.length + 0)
+						r2 = Math.floor(Math.random() * groupMetadata.participants.length + 0)
+						if(args.length < 1) {
+							client.sendMessage(from, `*Pesquisando quem é a alma gêmea do @${groupMembers[r1].jid.slice(0, -15)}...*`, extendedText, {quoted: mek, contextInfo: {mentionedJid: [groupMembers[r1].jid]}})
+							setTimeout(async function () {
+								client.sendMessage(from, buff, image, {caption: `*✅ Consegui achar a alma gêmea do @${groupMembers[r1].jid.slice(0, -15)} ✅*\n 
+*De acordo com meus cálculos altamente precisos, a pessoa que combina com @${groupMembers[r1].jid.slice(0, -15)} é: @${groupMembers[r2].jid.slice(0, -15)}*`, quoted: mek, contextInfo: {"mentionedJid": [groupMembers[r1].jid, groupMembers[r2].jid] }})
+							}, 3000)
+						
+						}
+						else {
+							num1 = args[0]
+							if(!isNaN(num1.slice(1)))
+							{
+								if(num1.startsWith('@')) {num1 = num1.slice(1)+'@s.whatsapp.net'}
+								else return('Número não encontrado')
+							}
+							else return reply('Marque um Numero')
+							client.sendMessage(from,`*Pesquisando quem é a alma gêmea do @${num1.slice(0, -15)} ...*`, extendedText, {quoted: mek, contextInfo: {mentionedJid: [num1]}})
+							setTimeout(async function () {
+								client.sendMessage(from, buff, image, {caption: `*✅ Consegui achar a alma gêmea do @${num1.slice(0, -15)} ✅*\n 
+*De acordo com meus cálculos altamente precisos, a pessoa que combina com @${num1.slice(0, -15)} é: @${groupMembers[r2].jid.slice(0, -15)}*`, quoted: mek, contextInfo: {"mentionedJid": [num1, groupMembers[r2].jid]}})
+							}, 3000)
+						}
+					} catch {
+						reply('Error')
+					}
+					break
 				case 'filtroativo':
 					if(!isGroupAdmins) return reply(mess.only.admin)
 					if(!isGroup) return reply(mess.only.group)
@@ -2775,8 +2834,7 @@ Tema: ${voto[0].tema}\n\n${teks}`, extendedText, {contextInfo: { mentionedJid: [
 				case 'simi':
 					if (args.length < 1) return reply('CADE A PRR DO TEXTO')
 					teks = body.slice(5)
-					anu = await simih(teks) //fetchJson(`https://mhankbarbars.herokuapp.com/api/samisami?text=${teks}`, {method: 'get'})
-					//if (anu.error) return reply('Simi ga tau kak')
+					anu = await simih(teks)
 					reply(anu)
 					break
 				case 'simih':
