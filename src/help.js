@@ -148,6 +148,22 @@ Como Usar: Envie .changepack + o nome que deseja no pacote da figurinha
 
 🔥 COMANDOS EXCLUSIVOS PARA PROPRIETÁRIOS 🔥
 
+
+❑ .antipornimg ❑
+Função: ativa o anti porno de imagens
+Como Usar: .antipornimg 1 para ativar e .antipornimg 0 para desativar
+Obs: Este comando pode ser usado se você for um administrador
+
+❑ .antipornvid ❑
+Função: ativa o anti porno de vídeos
+Como Usar: .antipornvid 1 para ativar e .antipornvid 0 para desativar
+Obs: Este comando pode ser usado se você for um administrador
+
+❑ .durpornvid ❑
+Função: duração do corte do anti porno de videos
+Como Usar: .durpornvid (num)
+Obs: Este comando pode ser usado se você for um proprietário do bot
+
 ❑ .antipv ❑
 Função: ativa o bloqueamento de pessoas que invade pv do bot
 Como Usar: .antipv 1 para ativar e .antipv 0 para desativar

@@ -33,6 +33,7 @@ const { termux } = require('./src/termux')
 const  { urlShortener } = require('./lib/shortener')
 const ffmpeg = require('fluent-ffmpeg')
 const { removeBackgroundFromImageFile } = require('remove.bg')
+const {uploadimg} = require('./lib/uploadimg')
 const imgbb = require('imgbb-uploader')
 const lolis = require('lolis.life')
 const { get } = require('request')
@@ -41,10 +42,13 @@ const { type } = require('os')
 const {stickerImgTag, stickerVidTag, addExif, stickerForVideo } = require('./lib/sticker')
 const { welcometxt } = require('./welcometext')
 const ytdl = require('ytdl-core');
+const durpornvid = JSON.parse(fs.readFileSync('./src/database/durpornvid.json'))
 const sticker_pack = JSON.parse(fs.readFileSync('./src/database/sticker_pack.json'))
 const antilink = JSON.parse(fs.readFileSync('./src/database/antilink.json'))
 const antilinkhard = JSON.parse(fs.readFileSync('./src/database/antilinkhard.json'))
 const antifake = JSON.parse(fs.readFileSync('./src/database/antifake.json'))
+const antipornvid = JSON.parse(fs.readFileSync('./src/database/antipornvid.json'))
+const antipornimg = JSON.parse(fs.readFileSync('./src/database/antipornimg.json'))
 const loli = new lolis()
 const antipv = JSON.parse(fs.readFileSync('./src/database/antipv.json'))
 const antipalavra = JSON.parse(fs.readFileSync('./src/database/antipalavra.json'))
@@ -357,9 +361,9 @@ async function starts() {
 			const apiKey = 'Your-Api-Key'
 			const { text, extendedText, contact, location, liveLocation, image, video, sticker, document, audio, product } = MessageType
 			const time = moment.tz('Asia/Jakarta').format('DD/MM HH:mm:ss')
-			body = (type === 'conversation' && mek.message.conversation.startsWith(prefix)) ? mek.message.conversation : (type == 'imageMessage') && mek.message.imageMessage.caption.startsWith(prefix) ? mek.message.imageMessage.caption : (type == 'videoMessage') && mek.message.videoMessage.caption.startsWith(prefix) ? mek.message.videoMessage.caption : (type == 'extendedTextMessage') && mek.message.extendedTextMessage.text.startsWith(prefix) ? mek.message.extendedTextMessage.text : ''
+			body = (type === 'conversation' && mek.message.conversation.startsWith(prefix)) ? mek.message.conversation : (type == 'imageMessage') && mek.message.imageMessage.caption && mek.message.imageMessage.caption.startsWith(prefix) ? mek.message.imageMessage.caption : (type == 'videoMessage') && mek.message.videoMessage.caption && mek.message.videoMessage.caption.startsWith(prefix) ? mek.message.videoMessage.caption : (type == 'extendedTextMessage') && mek.message.extendedTextMessage.text.startsWith(prefix) ? mek.message.extendedTextMessage.text : ''
 			budy = (type === 'conversation') ? mek.message.conversation : (type === 'extendedTextMessage') ? mek.message.extendedTextMessage.text : ''
-			bady = (type === 'conversation') ? mek.message.conversation : (type == 'imageMessage') ? mek.message.imageMessage.caption : (type == 'videoMessage') ? mek.message.videoMessage.caption : (type == 'extendedTextMessage') ? mek.message.extendedTextMessage.text : (mek.message.listResponseMessage && mek.message.listResponseMessage.singleSelectReply.selectedRowId) ? mek.message.listResponseMessage.singleSelectReply.selectedRowId: ''
+			bady = (type === 'conversation') ? mek.message.conversation : (type == 'imageMessage') && mek.message.imageMessage.caption ? mek.message.imageMessage.caption : (type == 'videoMessage') && mek.message.videoMessage.caption ? mek.message.videoMessage.caption : (type == 'extendedTextMessage') ? mek.message.extendedTextMessage.text : (mek.message.listResponseMessage && mek.message.listResponseMessage.singleSelectReply.selectedRowId) ? mek.message.listResponseMessage.singleSelectReply.selectedRowId: ''
 			
 			const palavrasid = []
 
@@ -370,7 +374,7 @@ async function starts() {
 			const command = body.slice(1).trim().split(/ +/).shift().toLowerCase()
 			const args = body.trim().split(/ +/).slice(1)
 			const isCmd = body.startsWith(prefix)
-			mess = {
+			let mess = {
 				wait: '⌛ Aguarde um pouco... ⌛',
 				success: '✔️ Sucesso! ✔️',
 				error: {
@@ -407,6 +411,8 @@ async function starts() {
 			const isAntiPv = (antipv.indexOf('Ativado') >= 0) ? true : false
 			const isSimi = isGroup ? samih.includes(from) : false
 			const isOwner = ownerNumber.includes(sender)
+			const isAntiPornVid = isGroup ? antipornvid.includes(from) : false
+			const isAntiPornImg = isGroup ? antipornimg.includes(from) : false
 			const isAntiPalavra = isGroup ? antipalavra.includes(from) : false
 			const voto = JSON.parse(fs.readFileSync('./src/database/voto.json'))
 			const gpvoto = JSON.parse(fs.readFileSync('./src/database/gpvoto.json'))
@@ -459,7 +465,9 @@ ${prefix}finishvoto - Encerra a votação
 ${prefix}broadvoto
 ${prefix}votobroad - Faz uma transmissão da votação para todos que usam o bot`
 			const isUrl = (url) => {
-				if(linkfy.find(url)[0]) return true
+				if(type === MessageType.text) {
+					if(linkfy.find(url)[0]) return true
+				}
 				return false
 			}
 			const reply = (teks) => {
@@ -503,6 +511,109 @@ ${prefix}votobroad - Faz uma transmissão da votação para todos que usam o bot
 			if (!isCmd && isGroup) console.log('\x1b[1;31m~\x1b[1;37m>', '[\x1b[1;31mRECV\x1b[1;37m]', time, color('Message'), 'from', color(sender.split('@')[0]), 'in', color(groupName), 'args :', color(args.length))
 			if(isCmd && blockeds.includes(sender)) return reply(`❌ NÚMERO BLOQUEADO POR NÃO CUMPRIR AS REGRAS, ENTRE EM CONTATO COM O PROPRIETÁRIO DO BOT PARA SABER COMO USAR OS MEUS COMANDOS ❌ 
 NÚMERO DO PROPRIETÁRIO DO BOT>> Wa.me/+5521982882464`)
+			if(type == MessageType.video) {
+				if(isMedia && mek.message.videoMessage.seconds < 20 && isAntiPornVid) {
+					const encmedia = mek
+					const media = await client.downloadAndSaveMediaMessage(encmedia)
+					ran = getRandom('.gif')
+					execute(`ffmpeg -i ${media}  -fs 3M -vf "fps=5,scale=320:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" -loop 0 ${ran}`).then(async (res, err) => {
+						const upload = await uploadimg('17desetembro', ran, ran)
+						anu = await fetchJson(`http://brizas-api.herokuapp.com/ia/porngifdetect?apikey=17desetembro&img=${upload.resultado.link}`)
+						porn_media = parseFloat(anu.result_media.porno)
+						hentai_media = parseFloat(anu.result_media.hentai)
+						console.log(hentai_media)
+						sexy_media = parseFloat(anu.result_media.sexy)
+						if(!isGroupAdmins && isBotGroupAdmins) {
+							if(porn_media >= 50) {
+								reply('*Porno detectado, banindo usuário...*')
+								client.groupRemove(from, [sender])
+								fs.unlinkSync(media)
+								fs.unlinkSync(ran)
+								return
+							}else if(hentai_media >= 50) {
+								reply('*Porno detectado, banindo usuário...*')
+								client.groupRemove(from, [sender])
+								fs.unlinkSync(media)
+								fs.unlinkSync(ran)
+								return
+							} else if(sexy_media > 50) {
+								reply('*Porno detectado, banindo usuário...*')
+								client.groupRemove(from, [sender])
+								fs.unlinkSync(media)
+								fs.unlinkSync(ran)
+								return
+							}
+						} 
+					})
+				} else if(isMedia && isAntiPornVid && type == MessageType.video) {
+					const encmedia = mek
+					const media = await client.downloadAndSaveMediaMessage(encmedia)
+					ran = getRandom('.gif')
+					execute(`ffmpeg -i ${media} -fs 3M -ss 00:00:00 -to 00:00:${durpornvid[0]} -vf "fps=5,scale=320:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" -loop 0 ${ran}`).then(async (res, err) => {
+						const upload = await uploadimg('17desetembro', ran, ran)
+						anu = await fetchJson(`http://brizas-api.herokuapp.com/ia/porngifdetect?apikey=17desetembro&img=${upload.resultado.link}`)
+						console.log(anu)
+						porn_media = parseFloat(anu.result_media.porno)
+						hentai_media = parseFloat(anu.result_media.hentai)
+						sexy_media = parseFloat(anu.result_media.sexy)
+						if(!isGroupAdmins && isBotGroupAdmins) {
+							if(porn_media > 50) {
+								reply('*Porno detectado, banindo usuário...*')
+								client.groupRemove(from, [sender])
+								fs.unlinkSync(media)
+								fs.unlinkSync(ran)
+								return
+							}
+							if(hentai_media > 50) {
+								reply('*Porno detectado, banindo usuário...*')
+								client.groupRemove(from, [sender])
+								fs.unlinkSync(media)
+								fs.unlinkSync(ran)
+								return
+							}
+							if(sexy_media > 50) {
+								reply('*Porno detectado, banindo usuário...*')
+								client.groupRemove(from, [sender])
+								fs.unlinkSync(media)
+								fs.unlinkSync(ran)
+								return
+							}
+						}
+					})
+				}
+			}
+			if (isAntiPornImg && isBotGroupAdmins) {
+				if (type === MessageType.image) {
+					savedFilename = await client.downloadAndSaveMediaMessage (mek)
+					ran = getRandom('.'+savedFilename.split('.')[1])
+					const upload = await uploadimg('17desetembro', savedFilename, ran)
+					anu = await fetchJson(`https://nsfw-demo.sashido.io/api/image/classify?url=${upload.resultado.link}`)
+					if(anu[0].className === 'Porn' && isGroupAdmins)  {
+						await client.sendMessage(from, 'Porno detectado, porém usuário é admin', MessageType.text, {quoted: mek})
+						return
+					} else if(anu[0].className === 'Porn' && !isGroupAdmins) {
+						await client.sendMessage(from, 'Porno detectado, banindo usuário...', MessageType.text, {quoted: mek})
+						setTimeout(async function () {
+							client.groupRemove(from, [sender])
+						}, 2000)
+						return
+					}
+					if(anu[0].className === 'Hentai' && isGroupAdmins) {
+						await client.sendMessage(from, 'Porno detectado, porém usuário é admin', MessageType.text, {quoted: mek})
+						return
+
+					}  else if(anu[0].className === 'Hentai' && !isGroupAdmins) {
+						await client.sendMessage(from, 'Porno detectado, banindo usuário...', MessageType.text, {quoted: mek})
+						setTimeout(async function () {
+							client.groupRemove(from, [sender])
+						}, 2000)
+						return
+					}
+					if(anu[0].className === 'Sexy') return client.sendMessage(from,'Cuidado com oq manda em amigo, to com antiporn ativado', MessageType.text, {quoted: mek})
+					fs.unlinkSync(savedFilename)
+				}
+			}
+
 			if(isAntiPv && !isGroup && !isOwner) {
 				if(isAvised.indexOf(sender) >= 0) {
 					reply('*🚫 ANTI PV LIGADO E VOCÊ FOI AVISADO, LOGO SERÁ BLOQUEADO 🚫*')
@@ -595,7 +706,7 @@ NÚMERO DO PROPRIETÁRIO DO BOT>> Wa.me/+5521982882464`)
 			for(let obj of countMessage) {
 				groupIdscount.push(obj.groupId)
 			}
-			
+
 			if(isGroup && groupIdscount.indexOf(from) >= 0) {
 				var ind = groupIdscount.indexOf(from)
 				for(let obj of countMessage[ind].numbers) {numbersIds.push(obj.jid)}
@@ -676,6 +787,49 @@ NÚMERO DO PROPRIETÁRIO DO BOT>> Wa.me/+5521982882464`)
             }
 
 			switch(command) {
+				case 'durpornvid':
+					if(!isOwner) return reply(mess.only.ownerB)
+					if(args.lenght < 1) return reply('Digite o tamanho da duração a ser capturada do vídeo')
+					if(isNaN(args[0])) return reply('Digite número válidos')
+					durpornvid[0] = parseInt(args[0])
+					fs.writeFileSync('./src/database/durpornvid.json', JSON.stringify(durpornvid))
+					break
+				case 'antipornimg':
+					if (!isGroup) return reply(mess.only.group)
+					if(!isGroupAdmins) return reply(mess.only.admin)
+					if(!isBotGroupAdmins) return reply(mess.only.Badmin)
+					if(args.length < 1) return reply('*1 ou 0*')
+					if (Number(args[0]) === 1) {
+						if (isAntiPornImg) return reply('Ja esta ativo')
+						antipornimg.push(from)
+						fs.writeFileSync('./src/database/antipornimg.json', JSON.stringify(antipornimg, null, 2))
+						reply('Ativou com sucesso o recurso de anti porno de imagem neste grupo✔️')
+					} else if (Number(args[0]) === 0) {
+						antipornimg.splice(from, 1)
+						fs.writeFileSync('./src/database/antipornimg.json', JSON.stringify(antipornimg, null, 2))
+						reply('Desativou com sucesso o recurso de anti porno de imagem neste grupo✔️')
+					} else {
+						reply('1 para ativar, 0 para desativar')
+					}
+					break
+				case 'antipornvid':
+					if (!isGroup) return reply(mess.only.group)
+					if(!isGroupAdmins) return reply(mess.only.admin)
+					if(!isBotGroupAdmins) return reply(mess.only.Badmin)
+					if(args.length < 1) return reply('*1 ou 0*')
+					if (Number(args[0]) === 1) {
+						if (isAntiPornVid) return reply('Ja esta ativo')
+						antipornvid.push(from)
+						fs.writeFileSync('./src/database/antipornvid.json', JSON.stringify(antipornvid, null, 2))
+						reply('Ativou com sucesso o recurso de anti porno de vídeo neste grupo✔️')
+					} else if (Number(args[0]) === 0) {
+						antipornvid.splice(from, 1)
+						fs.writeFileSync('./src/database/antipornvid.json', JSON.stringify(antipornvid, null, 2))
+						reply('Desativou com sucesso o recurso de anti porno de vídeo neste grupo✔️')
+					} else {
+						reply('1 para ativar, 0 para desativar')
+					}
+					break
 				case 'ship':
 					try {
 					buff = await getBuffer('https://arqaparecida.org.br/assets/img/arq_noticia/282.jpg')
