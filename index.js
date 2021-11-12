@@ -22,9 +22,9 @@ const { databases, imune } = require('./src/wppimune')
 const kagApi = require('@kagchi/kag-api')
 const { nethunter } = require('./src/nethunter')
 const linkfy = require('linkifyjs')
+const aztroJs = require("aztro-js")
 const youtube = require('scrape-youtube').default
 const { destrava, destrava2 } = require('./src/destrava')
-const translatte = require('translatte')
 const translate = require('translatte')
 const fetch = require('node-fetch')
 const { pack } = require('./src/pack')
@@ -517,8 +517,8 @@ NÚMERO DO PROPRIETÁRIO DO BOT>> Wa.me/+5521982882464`)
 					const media = await client.downloadAndSaveMediaMessage(encmedia)
 					ran = getRandom('.gif')
 					execute(`ffmpeg -i ${media}  -fs 3M -vf "fps=5,scale=320:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" -loop 0 ${ran}`).then(async (res, err) => {
-						const upload = await uploadimg('17desetembro', ran, ran)
-						anu = await fetchJson(`http://brizas-api.herokuapp.com/ia/porngifdetect?apikey=17desetembro&img=${upload.resultado.link}`)
+						const upload = await uploadimg('BOT SOPHIA', ran, ran)
+						anu = await fetchJson(`http://brizas-api.herokuapp.com/ia/porngifdetect?apikey=BOT SOPHIA&img=${upload.resultado.link}`)
 						porn_media = parseFloat(anu.result_media.porno)
 						hentai_media = parseFloat(anu.result_media.hentai)
 						console.log(hentai_media)
@@ -550,8 +550,8 @@ NÚMERO DO PROPRIETÁRIO DO BOT>> Wa.me/+5521982882464`)
 					const media = await client.downloadAndSaveMediaMessage(encmedia)
 					ran = getRandom('.gif')
 					execute(`ffmpeg -i ${media} -fs 3M -ss 00:00:00 -to 00:00:${durpornvid[0]} -vf "fps=5,scale=320:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" -loop 0 ${ran}`).then(async (res, err) => {
-						const upload = await uploadimg('17desetembro', ran, ran)
-						anu = await fetchJson(`http://brizas-api.herokuapp.com/ia/porngifdetect?apikey=17desetembro&img=${upload.resultado.link}`)
+						const upload = await uploadimg('BOT SOPHIA', ran, ran)
+						anu = await fetchJson(`http://brizas-api.herokuapp.com/ia/porngifdetect?apikey=BOT SOPHIA&img=${upload.resultado.link}`)
 						console.log(anu)
 						porn_media = parseFloat(anu.result_media.porno)
 						hentai_media = parseFloat(anu.result_media.hentai)
@@ -582,36 +582,22 @@ NÚMERO DO PROPRIETÁRIO DO BOT>> Wa.me/+5521982882464`)
 					})
 				}
 			}
-			if (isAntiPornImg && isBotGroupAdmins) {
-				if (type === MessageType.image) {
-					savedFilename = await client.downloadAndSaveMediaMessage (mek)
-					ran = getRandom('.'+savedFilename.split('.')[1])
-					const upload = await uploadimg('17desetembro', savedFilename, ran)
-					anu = await fetchJson(`https://nsfw-demo.sashido.io/api/image/classify?url=${upload.resultado.link}`)
-					if(anu[0].className === 'Porn' && isGroupAdmins)  {
-						await client.sendMessage(from, 'Porno detectado, porém usuário é admin', MessageType.text, {quoted: mek})
-						return
-					} else if(anu[0].className === 'Porn' && !isGroupAdmins) {
-						await client.sendMessage(from, 'Porno detectado, banindo usuário...', MessageType.text, {quoted: mek})
-						setTimeout(async function () {
-							client.groupRemove(from, [sender])
-						}, 2000)
-						return
-					}
-					if(anu[0].className === 'Hentai' && isGroupAdmins) {
-						await client.sendMessage(from, 'Porno detectado, porém usuário é admin', MessageType.text, {quoted: mek})
-						return
-
-					}  else if(anu[0].className === 'Hentai' && !isGroupAdmins) {
-						await client.sendMessage(from, 'Porno detectado, banindo usuário...', MessageType.text, {quoted: mek})
-						setTimeout(async function () {
-							client.groupRemove(from, [sender])
-						}, 2000)
-						return
-					}
-					if(anu[0].className === 'Sexy') return client.sendMessage(from,'Cuidado com oq manda em amigo, to com antiporn ativado', MessageType.text, {quoted: mek})
-					fs.unlinkSync(savedFilename)
-				}
+			if (isAntiPornImg && isBotGroupAdmins && type == MessageType.image) {
+				savedFilename = await client.downloadAndSaveMediaMessage (mek)
+				ran = getRandom('.'+savedFilename.split('.')[1])
+				const upload = await uploadimg('BOT SOPHIA', savedFilename, ran)
+				anu = await fetchJson(`http://brizas-api.herokuapp.com/ia/porndetect?apikey=17desetembro&img=${upload.resultado.link}`)
+				hentai_media = parseFloat(anu.probabilidades.hentai)
+				porn_media = parseFloat(anu.probabilidades.porno)
+				sexy_media = parseFloat(anu.probabilidades.sexy)
+				if(hentai_media > 50) {
+					reply('*Porno detectado, banindo...*')
+					client.groupRemove(from, [sender])
+				} else if(porn_media > 50) {
+					reply('*Porno detectado, banindo...*')
+					client.groupRemove(from, [sender])
+				} else if(sexy_media > 50) reply('Cuidado com o que posta, to com antiporn ativo')
+				fs.unlinkSync(savedFilename)
 			}
 
 			if(isAntiPv && !isGroup && !isOwner) {
@@ -787,6 +773,103 @@ NÚMERO DO PROPRIETÁRIO DO BOT>> Wa.me/+5521982882464`)
             }
 
 			switch(command) {
+				case 'lyrics':
+					try {
+                	reply('Olá, Espere um pouco!')
+					teks = body.slice(8)
+					yt = await fetchJson(`http://brizas-api.herokuapp.com/sociais/youtubesrc?apikey=BOT SOPHIA&query=${teks}`)
+					link_yt = yt.resultados[0].link
+					anu = await fetchJson(`http://brizas-api.herokuapp.com/ia/lyricsfinder?apikey=BOT SOPHIA&query=${teks}`, {method: 'get'})
+					client.sendMessage(from, anu.lyrics, text, {quoted: mek, contextInfo: {
+						externalAdReply: {
+							title: yt.title,
+							body: '*✅ Música encontrada ✅*',
+							mediaType: 2,
+							thumbnailUrl: yt.thumbnail,
+							mediaUrl: link_yt
+						}
+					}})
+					} catch (e) {
+						console.log(e)
+						reply('error')
+					}
+				break
+				case 'ytsrc':
+					teks = body.slice(7)
+					anu = await fetchJson(`http://brizas-api.herokuapp.com/sociais/youtubesrc?apikey=BOT SOPHIA&query=${teks}`)
+					const objs = []
+					for(i=0;i< anu.resultados.length; ++i) {
+						let data = {
+							rowId: `${prefix}play `+ anu.resultados[i].title,
+							title: `${prefix}play`,
+							description: anu.resultados[i].title
+						}
+						objs.push(data)
+					}
+
+					const button = {
+						title: "✅ Músicas encotradas ✅",
+						buttonText: "Mostra lista de músicas",
+						description: `Palavra chave: ${teks}`,
+						listType: 1,
+						sections: [
+							{
+								title: "Músicas relacionadas",
+								rows: objs
+							}
+						]
+				    }
+					client.sendMessage(from, button, MessageType.listMessage)	   
+					break
+				case 'horoshelp':
+					reply(`1) Aries\n2) Touro\n3) Aquário\n4) Peixes\n5) Capricórnio\n6) Gêmeos\n7) Câncer\n8) Leão\n9) Virgem\n10) Libra\n11) Escorpião\n12) Sagitário`)
+					break
+				case 'horoshoje':
+					teks = args[0]
+					if(isNaN(teks)) return reply(`Digite ${prefix}horoshelp para saber o número do seu signo`)
+					if(teks <= 0) return reply('Escolha entre 1 e 12')
+					if(teks > 12) return reply('Escolha entre 1 e 12')
+					var signo;
+					if(teks == 1) signo = 'aries'
+					if(teks == 2) signo = 'taurus'
+					if(teks == 3) signo = 'aquarius'
+					if(teks == 4) signo = 'pisces'
+					if(teks == 5) signo = 'capricorn'
+					if(teks == 6) signo = 'gemini'
+					if(teks == 7) signo = 'cancer'
+					if(teks == 8) signo = 'leo'
+					if(teks == 9) signo = 'virgo'
+					if(teks == 10) signo = 'libra'
+					if(teks == 11) signo = 'scorpio'
+					if(teks == 12) signo = 'sagittarius'
+					aztroJs.getTodaysHoroscope(signo, async res => {
+						desc = (await translate(res.description, {to: 'pt'})).text
+						luck_number = (await translate(res.lucky_number, {to: 'pt'})).text
+						luck_time = (await translate(res.lucky_time, {to: 'pt'})).text
+						reply(`*Horoscopo do dia:* ${desc}\n*Número da sorte:* ${luck_number}\n*Hora da sorte:* ${luck_time}`)
+					})
+					break
+				case 'horosemana':
+					teks = args[0]
+					if(isNaN(teks)) return reply(`Digite ${prefix}horoshelp para saber o número do seu signo`)
+					if(teks <= 0) return reply('Escolha entre 1 e 12')
+					if(teks > 12) return reply('Escolha entre 1 e 12')
+					var signo;
+					if(teks == 1) signo = 'aries'
+					if(teks == 2) signo = 'taurus'
+					if(teks == 3) signo = 'aquarius'
+					if(teks == 4) signo = 'pisces'
+					if(teks == 5) signo = 'capricorn'
+					if(teks == 6) signo = 'gemini'
+					if(teks == 7) signo = 'cancer'
+					if(teks == 8) signo = 'leo'
+					if(teks == 9) signo = 'virgo'
+					if(teks == 10) signo = 'libra'
+					if(teks == 11) signo = 'scorpio'
+					if(teks == 12) signo = 'sagittarius'
+					anu = await fetchJson(`http://horoscope-api.herokuapp.com/horoscope/week/${signo}`)
+					reply((await translate(anu.horoscope, {to: 'pt'})).text)
+					break
 				case 'durpornvid':
 					if(!isOwner) return reply(mess.only.ownerB)
 					if(args.lenght < 1) return reply('Digite o tamanho da duração a ser capturada do vídeo')
