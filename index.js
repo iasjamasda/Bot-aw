@@ -771,7 +771,6 @@ NÚMERO DO PROPRIETÁRIO DO BOT>> Wa.me/+5521982882464`)
             } catch (err) {
                 console.error(err)
             }
-			console.log(mek)
 			switch(command) {
 				
 				case 'lyrics':
