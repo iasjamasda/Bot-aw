@@ -771,8 +771,9 @@ NÚMERO DO PROPRIETÁRIO DO BOT>> Wa.me/+5521982882464`)
             } catch (err) {
                 console.error(err)
             }
-
+			console.log(mek)
 			switch(command) {
+				
 				case 'lyrics':
 					try {
                 	reply('Olá, Espere um pouco!')
@@ -821,7 +822,7 @@ NÚMERO DO PROPRIETÁRIO DO BOT>> Wa.me/+5521982882464`)
 				    }
 					client.sendMessage(from, button, MessageType.listMessage)	   
 					break
-				case 'horoshelp':
+				case 'signos':
 					reply(`1) Aries\n2) Touro\n3) Aquário\n4) Peixes\n5) Capricórnio\n6) Gêmeos\n7) Câncer\n8) Leão\n9) Virgem\n10) Libra\n11) Escorpião\n12) Sagitário`)
 					break
 				case 'horoshoje':
