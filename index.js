@@ -2685,7 +2685,7 @@ Tema: ${voto[0].tema}\n\n${teks}`, extendedText, {contextInfo: { mentionedJid: [
 								fs.unlinkSync(media)
 							}, 5000)
 						})
-					} else return reply(`Marque a imagem com o comando .sticker ou coloque na legenda, o video ou gif só pode ter 10 segundos de duração, caso queira coloque o comando e um número menor que 10`)
+					} else return reply(`*Marque a imagem com o comando .sticker ou coloque na legenda, o video ou gif só pode ter 6 segundos de duração, se sua figurinha sair falhada peça ajuda aos ADMs do grupo*`)
 				break
 				case 'fsticker':
 				case 'fstiker':
@@ -2742,7 +2742,7 @@ Tema: ${voto[0].tema}\n\n${teks}`, extendedText, {contextInfo: { mentionedJid: [
 							.toFormat('webp')
 							.save(ran)
 					}
-					else return reply(`*Marque a imagem com o comando .sticker ou coloque na legenda, o video ou gif só pode ter 10 segundos de duração, caso queira coloque o comando e um número menor que 10*`)
+					else return reply(`Marque a imagem com o comando .fsticker ou coloque na legenda, o video ou gif só pode ter 6 segundos de duração, se sua figurinha sair falhada peça ajuda aos ADMs do grupo`)
 				break
 				case 'gtts':
 					if (args.length < 1) return client.sendMessage(from, 'CADE A PRR DO CODIGO DO IDIOMA???', text, {quoted: mek})
