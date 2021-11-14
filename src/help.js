@@ -1,6 +1,19 @@
 const help = (prefix) => {
 	return `💎 • Comandos da BOT-SOPHIA• 💎  
 
+🔮 HORÓSCOPO 🔮
+
+❑ .signos ❑
+Função: Mostra lista de signos e os número pra usar nos comandos
+
+❑ .horoshoje ❑
+Função: Mostra o horóscopo de hoje de acordo com o signo
+Como Usar: .horoshoje (num do signo)
+
+❑ .horosemana ❑
+Função: Mostra o horóscopo da semana de acordo com o signo
+Como Usar: .horoshoje (num do signo)
+
 🥇 SISTEMA DE NIVEIS 🥇
 
 ❑ .level ❑
