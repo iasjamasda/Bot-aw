@@ -35,6 +35,21 @@ Função: Desbloqueia o comando no grupo
 Como Usar: .rmblockgpcmd (cmd)
 
 ❑ .blockgpcmdlist ❑
+Função: Lista comandos bloqueados no grupo
+
+❑ .admingpcmd ❑
+Função: Ativa o bloqueio de comandos no grupo
+Como Usar: .blockgpcmd 1/0
+
+❑ .addadmingpcmd ❑
+Função: Bloqueia o comando no grupo
+Como Usar: .addblockgpcmd (cmd)
+
+❑ .rmadmingpcmd ❑
+Função: Desbloqueia o comando no grupo
+Como Usar: .rmblockgpcmd (cmd)
+
+❑ .admingpcmdlist ❑
 Função: Lista comandos bloqueados no grupo 
 
 👤 ATIVIDADE DE MEMBROS 👤

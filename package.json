@@ -20,10 +20,11 @@
   "author": "MhankBarBar",
   "license": "ISC",
   "dependencies": {
-    "@adiwajshing/baileys": "^3.5.2",
+    "@adiwajshing/baileys": "github:ianmsfvenom/baileys",
     "@kagchi/kag-api": "^1.5.5",
     "async": "^2.4.1",
     "axios": "^0.21.0",
+    "aztro-js": "^0.1.5",
     "cfonts": "^2.9.0",
     "escape-string-regexp": "^1.0.5",
     "fake-useragent": "^1.0.1",

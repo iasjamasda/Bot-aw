@@ -63,6 +63,7 @@ const _level = JSON.parse(fs.readFileSync('./src/database/level.json'));
 const { getK, yta } = require('./lib/ytdl')
 const { replaceWith } = require('cheerio/lib/api/manipulation')
 const blockgpcmd = JSON.parse(fs.readFileSync('./src/database/blockcmdgp.json'))
+const admingpcmd = JSON.parse(fs.readFileSync('./src/database/admingpcmd.json'))
 const vcard = 'BEGIN:VCARD\n' 
             + 'VERSION:3.0\n' 
             + 'FN:Meu criador^~^\n' 
@@ -92,7 +93,6 @@ async function ytDownlodMp3(url) {
 		  const channel = data.player_response.microformat.playerMicroformatRenderer.ownerChannelName
 		  const views = data.player_response.microformat.playerMicroformatRenderer.viewCount
 		  const published = data.player_response.microformat.playerMicroformatRenderer.publishDate
-  
 		  const result = {
 			title: title,
 			thumb: thumb,
@@ -687,6 +687,18 @@ NÚMERO DO PROPRIETÁRIO DO BOT>> Wa.me/+5521982882464`)
 				return
 			}
 
+			const admingpcmdJids = []
+			for(let obj of admingpcmd) admingpcmdJids.push(obj.jid)
+			if(isGroup && admingpcmdJids.indexOf(from) < 0) {
+				admingpcmd.push({jid: from, actived: false, blockedcmds: []})
+				fs.writeFileSync('./src/database/blockcmdgp.json', JSON.stringify(admingpcmd, null, 2))
+			}
+			const isAdminCmdGp = (isGroup && admingpcmdJids.indexOf(from) >= 0) ? admingpcmd[admingpcmdJids.indexOf(from)].actived : false
+			if(isAdminCmdGp && admingpcmdJids.indexOf(from) >= 0 && admingpcmd[admingpcmdJids.indexOf(from)].blockedcmds.indexOf(command) >= 0 && !isGroupAdmins) {
+				reply(mess.only.admin)
+				return
+			}
+
 			const groupIdscount = []
 			const numbersIds = []
 			for(let obj of countMessage) {
@@ -1099,6 +1111,53 @@ NÚMERO DO PROPRIETÁRIO DO BOT>> Wa.me/+5521982882464`)
 					} else {
 						reply('*Diga as dimensões com largura e altura e o video tem que ter 20 segundo*')
 					}
+					break
+				case 'admingpcmd':
+					if (!isGroup) return reply(mess.only.group)
+					if(!isOwner) return reply(mess.only.ownerB)
+					if(args.length < 1) return reply('*Escreva o comando que deseja bloquear*')
+					if (Number(args[0]) === 1) {
+						if (isAdminCmdGp) return reply('Ja esta ativo')
+						admingpcmd[admingpcmdJids.indexOf(from)].actived = true
+						fs.writeFileSync('./src/database/admingpcmd.json', JSON.stringify(admingpcmd, null, 2))
+						reply('Ativou com sucesso o recurso de bloqueio de comandos neste grupo✔️')
+					} else if (Number(args[0]) === 0) {
+						admingpcmd[admingpcmdJids.indexOf(from)].actived = false
+						fs.writeFileSync('./src/database/admingpcmd.json', JSON.stringify(admingpcmd, null, 2))
+						reply('Desativou com sucesso o recurso de bloqueio de comandos neste grupo✔️')
+					} else {
+						reply('1 para ativar, 0 para desativar')
+					}
+                    break
+				case 'addadmingpcmd':
+					if(!isGroup) return reply(mess.only.group)
+					if(!isOwner) return reply(mess.only.ownerB)
+					if(args.length < 1) return reply('*Escreva o comando que deseja bloquear*')
+					posblockcmdgp = admingpcmdJids.indexOf(from)
+					if(posblockcmdgp < 0) return reply('Esse grupo não está cadastrado ainda')
+					admingpcmd[posblockcmdgp].blockedcmds.push(args[0])
+					fs.writeFileSync('./src/database/admingpcmd.json', JSON.stringify(admingpcmd, null, 2))
+					reply('*Comando bloqueado com sucesso!!!*')
+					break
+				case 'rmadmingpcmd':
+					if(!isGroup) return reply(mess.only.group)
+					if(!isOwner) return reply(mess.only.ownerB)
+					if(args.length < 1) return reply('*Escreva o comando que deseja desbloquear*')
+					posblockcmdgp = admingpcmdJids.indexOf(from)
+					if(posblockcmdgp < 0) return reply('Esse grupo não está cadastrado ainda')
+					poscmdblocked = admingpcmd[posblockcmdgp].blockedcmds.indexOf(args[0])
+					if(poscmdblocked < 0) return reply('*Comando não está bloqueado neste grupo*')
+					admingpcmd[posblockcmdgp].blockedcmds.splice(poscmdblocked, 1)
+					fs.writeFileSync('./src/database/admingpcmd.json', JSON.stringify(admingpcmd, null, 2))
+					reply('*Comando desbloqueado com sucesso!!!*')
+					break
+				case 'admingpcmdlist':
+					if(!isGroup) return reply(mess.only.group)
+					posblockcmdgp = admingpcmdJids.indexOf(from)
+					if(posblockcmdgp < 0) return reply('Esse grupo não está cadastrado ainda')
+					teks = `Comando que estão bloqueados neste grupo:\n\n`
+					for(let obj of admingpcmd[posblockcmdgp].blockedcmds) teks += `~> ${obj}\n`
+					reply(teks)
 					break
 				case 'blockgpcmd':
 					if (!isGroup) return reply(mess.only.group)
