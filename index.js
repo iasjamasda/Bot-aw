@@ -364,7 +364,7 @@ async function starts() {
 			body = (type === 'conversation' && mek.message.conversation.startsWith(prefix)) ? mek.message.conversation : (type == 'imageMessage') && mek.message.imageMessage.caption && mek.message.imageMessage.caption.startsWith(prefix) ? mek.message.imageMessage.caption : (type == 'videoMessage') && mek.message.videoMessage.caption && mek.message.videoMessage.caption.startsWith(prefix) ? mek.message.videoMessage.caption : (type == 'extendedTextMessage') && mek.message.extendedTextMessage.text.startsWith(prefix) ? mek.message.extendedTextMessage.text : ''
 			budy = (type === 'conversation') ? mek.message.conversation : (type === 'extendedTextMessage') ? mek.message.extendedTextMessage.text : ''
 			bady = (type === 'conversation') ? mek.message.conversation : (type == 'imageMessage') && mek.message.imageMessage.caption ? mek.message.imageMessage.caption : (type == 'videoMessage') && mek.message.videoMessage.caption ? mek.message.videoMessage.caption : (type == 'extendedTextMessage') ? mek.message.extendedTextMessage.text : (mek.message.listResponseMessage && mek.message.listResponseMessage.singleSelectReply.selectedRowId) ? mek.message.listResponseMessage.singleSelectReply.selectedRowId: ''
-			console.log(mek)
+			
 			const palavrasid = []
 
 			for(let obj of listantipalavra) {
@@ -465,10 +465,8 @@ ${prefix}finishvoto - Encerra a votação
 ${prefix}broadvoto
 ${prefix}votobroad - Faz uma transmissão da votação para todos que usam o bot`
 			const isUrl = (url) => {
-				if(type === MessageType.text) {
-					if(linkfy.find(url)[0]) return true
-				}
-				return false
+				if(linkfy.find(url)[0]) return true
+				else return false
 			}
 			const reply = (teks) => {
 				client.sendMessage(from, teks, text, {quoted:mek})
@@ -611,7 +609,6 @@ NÚMERO DO PROPRIETÁRIO DO BOT>> Wa.me/+5521982882464`)
 					return
 				}
 			}
-
 			if(isUrl(bady) && isAntiLinkHard && !isGroupAdmins && isBotGroupAdmins) {
 				kic = `${sender.split("@")[0]}@s.whatsapp.net`
 				client.groupRemove(from, [kic])
