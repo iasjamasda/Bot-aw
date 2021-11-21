@@ -54,6 +54,12 @@ Função: Lista comandos bloqueados no grupo
 
 👤 ATIVIDADE DE MEMBROS 👤
 
+❑ .clearativoadmin ❑
+Função: Limpa a lista a atividade dos adms do grupo
+
+❑ .ativoadmin ❑
+Função: Lista a atividade dos adms do grupo
+
 ❑ .rankativo ❑
 Função: Rankea pessoas mais ativas do grupo
 

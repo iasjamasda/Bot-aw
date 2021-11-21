@@ -391,6 +391,7 @@ async function starts() {
 			}
 			
 			const countMessage = JSON.parse(fs.readFileSync('./src/database/countmsg.json'))
+			const countMessageAdmins = JSON.parse(fs.readFileSync('./src/database/countmsgadmin.json'))
 			const botNumber = client.user.jid
 			const OriginalOwner = '5521982882464'
 			const ownerNumber = JSON.parse(fs.readFileSync('./src/database/ownerNumber.json'))
@@ -720,8 +721,7 @@ NÚMERO DO PROPRIETÁRIO DO BOT>> Wa.me/+5521982882464`)
 					})
 					fs.writeFileSync('./src/database/countmsg.json', JSON.stringify(countMessage, null, 2) + '\n')
 				}
-			}
-			else if(isGroup) {
+			} else if(isGroup) {
 				countMessage.push({
 					groupId: from,
 					numbers: [{
@@ -731,6 +731,42 @@ NÚMERO DO PROPRIETÁRIO DO BOT>> Wa.me/+5521982882464`)
 					}]
 				})
 				fs.writeFileSync('./src/database/countmsg.json', JSON.stringify(countMessage, null, 2) + '\n')
+			}
+
+			const AdminsIdscount = []
+			const numbersAdminsIds = []
+			for(let obj of countMessageAdmins) {
+				AdminsIdscount.push(obj.groupId)
+			}
+
+			if(isGroup && AdminsIdscount.indexOf(from) >= 0) {
+				var ind = AdminsIdscount.indexOf(from)
+				for(let obj of countMessageAdmins[ind].numbers) {numbersAdminsIds.push(obj.jid)}
+				if(numbersAdminsIds.indexOf(sender) >=0 && isGroupAdmins) {
+					var indnum = numbersAdminsIds.indexOf(sender)
+					countMessageAdmins[ind].numbers[indnum].messages += 1
+					countMessageAdmins[ind].numbers[indnum].cmd_messages += isCmd ? 1 : 0
+					fs.writeFileSync('./src/database/countmsgadmin.json', JSON.stringify(countMessageAdmins, null, 2)+ '\n')
+				} else if(isGroupAdmins) {
+					const messages = 1
+					const cmd_messages = isCmd ? 1 : 0
+					countMessageAdmins[ind].numbers.push({
+						jid: sender,
+						messages: messages,
+						cmd_messages: cmd_messages
+					})
+					fs.writeFileSync('./src/database/countmsgadmin.json', JSON.stringify(countMessageAdmins, null, 2) + '\n')
+				}
+			} else if(isGroup && isGroupAdmins) {
+				countMessageAdmins.push({
+					groupId: from,
+					numbers: [{
+						jid: sender,
+						messages: 2,
+						cmd_messages: isCmd ? 1 : 0
+					}]
+				})
+				fs.writeFileSync('./src/database/countmsgadmin.json', JSON.stringify(countMessageAdmins, null, 2) + '\n')
 			}
 
 			votoactivegp = []
@@ -1041,6 +1077,41 @@ NÚMERO DO PROPRIETÁRIO DO BOT>> Wa.me/+5521982882464`)
 								if(numbersIds.indexOf(obj.jid) >=0) {
 									var indnum = numbersIds.indexOf(obj.jid)
 									teks += `➣ *@${countMessage[ind].numbers[indnum].jid.split('@')[0]}*\n*Mensagens: ${countMessage[ind].numbers[indnum].messages}\n*Comandos: ${countMessage[ind].numbers[indnum].cmd_messages}*\n`
+								} else {
+									teks += `➣ *@${obj.jid.split('@')[0]}*\n*Mensagens: 0*\n*Comandos: 0*\n`
+								}
+								mem.push(obj.jid)
+							}
+							client.sendMessage(from, teks, extendedText, {quoted: mek, contextInfo:{mentionedJid: mem}})
+						} else return reply('*Nada foi encontrado*')
+					} catch (e){
+						console.log(e)
+					}
+					break
+				case 'clearativoadmin':
+					try{
+						if(!isGroupAdmins) return reply(mess.only.admin)
+						if(isGroup && AdminsIdscount.indexOf(from) >= 0) {
+							var ind = AdminsIdscount.indexOf(from)
+							countMessageAdmins[ind].numbers = []
+							fs.writeFileSync('./src/database/countmsgadmin.json', JSON.stringify(countMessageAdmins, null, 2))
+							reply('*Atividade dos adms no gp foi limpada!*')
+						} else return reply('*Nada foi encontrado*')
+					} catch (e){
+						console.log(e)
+					}
+					break
+				case 'ativoadmin':
+					try{
+						if(!isGroupAdmins) return reply(mess.only.admin)
+						if(isGroup && AdminsIdscount.indexOf(from) >= 0) {
+							var ind = AdminsIdscount.indexOf(from)
+							teks = `*Atividade dos membros do grupo:*\n`
+							mem = []
+							for(let obj of groupAdmins) {
+								if(numbersAdminsIds.indexOf(obj.jid) >=0) {
+									var indnum = numbersAdminsIds.indexOf(obj.jid)
+									teks += `➣ *@${countMessageAdmins[ind].numbers[indnum].jid.split('@')[0]}*\n*Mensagens: ${countMessageAdmins[ind].numbers[indnum].messages}\n*Comandos: ${countMessageAdmins[ind].numbers[indnum].cmd_messages}*\n`
 								} else {
 									teks += `➣ *@${obj.jid.split('@')[0]}*\n*Mensagens: 0*\n*Comandos: 0*\n`
 								}
