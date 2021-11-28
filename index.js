@@ -56,6 +56,8 @@ const listantipalavra = JSON.parse(fs.readFileSync('./src/database/listaantipala
 const welkom = JSON.parse(fs.readFileSync('./src/database/welkom.json'))
 const dontback = JSON.parse(fs.readFileSync('./src/database/dontback.json'))
 const nsfw = JSON.parse(fs.readFileSync('./src/database/nsfw.json'))
+const autoreply = JSON.parse(fs.readFileSync('./src/database/autoreply.json'))
+const frases = JSON.parse(fs.readFileSync('./src/database/frase.json'))
 const samih = JSON.parse(fs.readFileSync('./src/database/simi.json'))
 const welcome_group = JSON.parse(fs.readFileSync('./src/database/welcome_group.json'))
 const bye_group = JSON.parse(fs.readFileSync('./src/database/bye_group.json'))
@@ -71,6 +73,7 @@ const vcard = 'BEGIN:VCARD\n'
             + 'TEL;type=CELL;type=VOICE;waid=5521982882464:+55 21 98288-2464\n' 
             + 'END:VCARD'
 prefix = '.'
+support_prefix = ['.', '#', '$', '@', '!', "*", '+', '-', '&', '%', '/', '>', '<', ':', ';']
 blocked = []
 isAvised = []
 
@@ -347,6 +350,7 @@ async function starts() {
 	})
 	client.on('chat-update', async (mek) => {
 		try {
+
 			if (!mek.hasNewMessage) return
 			mek = JSON.parse(JSON.stringify(mek)).messages[0]
 			if (!mek.message) return
@@ -361,7 +365,7 @@ async function starts() {
 			const apiKey = 'Your-Api-Key'
 			const { text, extendedText, contact, location, liveLocation, image, video, sticker, document, audio, product } = MessageType
 			const time = moment.tz('Asia/Jakarta').format('DD/MM HH:mm:ss')
-			body = (type === 'conversation' && mek.message.conversation.startsWith(prefix)) ? mek.message.conversation : (type == 'imageMessage') && mek.message.imageMessage.caption && mek.message.imageMessage.caption.startsWith(prefix) ? mek.message.imageMessage.caption : (type == 'videoMessage') && mek.message.videoMessage.caption && mek.message.videoMessage.caption.startsWith(prefix) ? mek.message.videoMessage.caption : (type == 'extendedTextMessage') && mek.message.extendedTextMessage.text.startsWith(prefix) ? mek.message.extendedTextMessage.text : ''
+			body = (type === 'conversation' && mek.message.conversation.startsWith(prefix)) ? mek.message.conversation : (type == 'imageMessage') && mek.message.imageMessage.caption.startsWith(prefix) ? mek.message.imageMessage.caption : (type == 'videoMessage') && mek.message.videoMessage.caption.startsWith(prefix) ? mek.message.videoMessage.caption : (type == 'extendedTextMessage') && mek.message.extendedTextMessage.text.startsWith(prefix) ? mek.message.extendedTextMessage.text : (mek.message.listResponseMessage && mek.message.listResponseMessage.singleSelectReply.selectedRowId.startsWith(prefix) && mek.message.listResponseMessage.singleSelectReply.selectedRowId) ? mek.message.listResponseMessage.singleSelectReply.selectedRowId: ''
 			budy = (type === 'conversation') ? mek.message.conversation : (type === 'extendedTextMessage') ? mek.message.extendedTextMessage.text : ''
 			bady = (type === 'conversation') ? mek.message.conversation : (type == 'imageMessage') && mek.message.imageMessage.caption ? mek.message.imageMessage.caption : (type == 'videoMessage') && mek.message.videoMessage.caption ? mek.message.videoMessage.caption : (type == 'extendedTextMessage') ? mek.message.extendedTextMessage.text : (mek.message.listResponseMessage && mek.message.listResponseMessage.singleSelectReply.selectedRowId) ? mek.message.listResponseMessage.singleSelectReply.selectedRowId: ''
 			
@@ -405,6 +409,7 @@ async function starts() {
 			const isBotGroupAdmins = groupAdmins.includes(botNumber) || false
 			const isGroupAdmins = groupAdmins.includes(sender) || false
 			const isAntiFake = isGroup ? antifake.includes(from) : false
+			const isAutoReply = isGroup ? autoreply.includes(from) : false
 			const isAntiLink = isGroup ? antilink.includes(from) : false
 			const isAntiLinkHard = isGroup ? antilinkhard.includes(from) : false
 			const isWelkom = isGroup ? welkom.includes(from) : false
@@ -816,8 +821,15 @@ NÚMERO DO PROPRIETÁRIO DO BOT>> Wa.me/+5521982882464`)
             } catch (err) {
                 console.error(err)
             }
+			if(isAutoReply) {
+				for(let obj of frases) {
+					if(obj.question.toLowerCase() == bady) return reply(obj.answer)
+				}
+			}
 			switch(command) {
-				
+				case 'setfrase':
+
+					break
 				case 'lyrics':
 					try {
                 	reply('Olá, Espere um pouco!')
@@ -845,8 +857,8 @@ NÚMERO DO PROPRIETÁRIO DO BOT>> Wa.me/+5521982882464`)
 					const objs = []
 					for(i=0;i< anu.resultados.length; ++i) {
 						let data = {
-							rowId: `${prefix}play `+ anu.resultados[i].title,
-							title: `${prefix}play`,
+							rowId: `${prefix}playv2 `+ anu.resultados[i].title,
+							title: `${prefix}playv2`,
 							description: anu.resultados[i].title
 						}
 						objs.push(data)
@@ -1864,28 +1876,6 @@ Tema: ${voto[0].tema}\n\n${teks}`, extendedText, {contextInfo: { mentionedJid: [
 						reply('Error')
 					}
 					break
-					case 'play':
-						if( args.length < 1) return reply('*E o texto animal*')
-						reply('*🔍Procurando Música aguarde🔎*')
-						teks = body.slice(6)
-						anu = await fetchJson(`http://brizas-api.herokuapp.com/sociais/youtubesrc?apikey=BOT SOPHIA&query=${teks}`)
-						date = anu.resultados[0]
-						dated = `*✅ Música encontrada ✅*\n*Titulo: ${date.title}*\n*Link: ${date.link}*\n*Duração: ${date.duration} segs*\n*Views: ${date.views}segs*\n*Canal:${date.channel.name}*`
-						buff = await getBuffer(date.thumbnail)
-						await client.sendMessage(from, buff, image, {quoted: mek, caption: dated})
-						var dur = date.duration
-						if(dur > 360) return reply('*Apenas músicas com 6 minutos de duração*')
-						reply('*⬇️ Baixando música ⬇️*')
-						try {
-							anumusic = await fetchJson(`http://brizas-api.herokuapp.com/sociais/ytmp3?apikey=BOT SOPHIA&url=${date.link}`)
-							buffmusic = await getBuffer(anumusic.link)
-							await reply('*🥳🥳 Download completo, enviando... 🥳🥳*')
-							client.sendMessage(from, buffmusic, audio, {quoted: mek, mimetype: Mimetype.mp4Audio})
-						}
-						catch {
-							reply('*Falha ao baixar música, instale por meio do playv2*')
-						}
-					break
 				case 'playv2':
 					if( args.length < 1) return reply('*E o texto animal*')
 						reply('*🔍Procurando Música aguarde🔎*')
@@ -2740,18 +2730,10 @@ Tema: ${voto[0].tema}\n\n${teks}`, extendedText, {contextInfo: { mentionedJid: [
 							reply('1 pra ativar e 0 pra desativar')
 						}
 				break
-				case 'nethunter':
-					buffer = await getBuffer(`https://i.imgur.com/uj6dP9Y.png`)
-					client.sendMessage(from, buffer, image, {quoted: mek, caption: nethunter()})
-				break
-				case 'termux':
-					buffer = await getBuffer(`https://i.imgur.com/NMk9sC4.png`)
-					client.sendMessage(from, buffer, image, {caption: termux(prefix)})
-					break
-					case 'creator':
-                 		 client.sendMessage(from, {displayname: "Lucas", vcard: vcard}, MessageType.contact, { quoted: mek})
-       				 	 client.sendMessage(from, 'Este é o número do meu proprietário >_<, não envie spam ou eu te bloqueio',MessageType.text, { quoted: mek} )
-           			break
+				case 'creator':
+             		 client.sendMessage(from, {displayname: "Lucas", vcard: vcard}, MessageType.contact, { quoted: mek})
+       			 	 client.sendMessage(from, 'Este é o número do meu proprietário >_<, não envie spam ou eu te bloqueio',MessageType.text, { quoted: mek} )
+       			break
 				case 'info':
 					me = client.user
 					uptime = process.uptime()
@@ -2890,23 +2872,6 @@ Tema: ${voto[0].tema}\n\n${teks}`, extendedText, {contextInfo: { mentionedJid: [
 						})
 					})
 				break
-				case 'db':
-					reply(databases(prefix))
-				break
-				case 'wppim':
-					reply(imune(prefix))
-				break
-				case 'meme':
-					meme = await kagApi.memes()
-					buffer = await getBuffer(`https://imgur.com/${meme.hash}.jpg`)
-					client.sendMessage(from, buffer, image, {quoted: mek, caption: '.......'})
-					break
-				
-				case 'memeindo':
-					memein = await kagApi.memeindo()
-					buffer = await getBuffer(`https://imgur.com/${memein.hash}.jpg`)
-					client.sendMessage(from, buffer, image, {quoted: mek, caption: '.......'})
-					break
 				case 'setprefix':
 					if (args.length < 1) return
 					if (!isOwner) return reply(mess.only.ownerB)
@@ -3271,7 +3236,9 @@ Tema: ${voto[0].tema}\n\n${teks}`, extendedText, {contextInfo: { mentionedJid: [
 					console.log(mek)
 					break
 				default:
-					if (isGroup && isSimi && budy != undefined) {
+
+					if(isCmd) reply('*❌ Esse comando não está registrado ❌*')
+					if (!isCmd && isGroup && isSimi && budy != undefined) {
 						console.log(budy)
 						muehe = await simih(budy)
 						console.log(muehe)

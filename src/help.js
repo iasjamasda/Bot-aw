@@ -106,9 +106,9 @@ Como Usar: Envie um sticker marque ele e responda com o comando .togif
 
 🎧 COMANDOS DE ÁUDIO/MÚSICAS 🎧
 
-❑ .play ❑
-Função: procura e baixa músicas do youtube
-Como Usar: .play + o título exato do vídeo que você quer a música
+❑ .ytsrc ❑
+Função: Manda uma mensagem lista com músicas referentes
+Como Usar: .ytsrc palavra chave
 
 ❑ .playv2 ❑
 Função: procura e baixa músicas do youtube
@@ -247,9 +247,6 @@ Como Usar: Envie .gostoso e marque o membro
 Função: Pesquisa imagens no google imagens
 Como Usar: Envie .gimage + o tipo de imagem que deseja
 
-❑ .termux ❑
-Função: Mostra uma lista de comandos básicos do termux
-
 ❑ .gtts ❑
 Função: converter texto em áudio
 Como Usar: Envie .gtts + sigla do idioma + o texto que quer transformar em áudio
@@ -259,17 +256,6 @@ Exemplo: .gtts pt BOA TARDE
 Função: Mostra o significado do seu nome
 Como usar: Envie .signome + o nome que deseja saber o significado
 Exemplo: .signome Sophia
-
-❑ .nethunter ❑
-Função: Mostra um tutorial de como ter um emulador de kali linux no seu termux
-
-❑ .db ❑
-Função: envia links de várias database para Whatsapp Imune
-Como usar: Envie .db
-
-Comando: ❑  .wppim ❑
-Função: envia links de alguns Whatsapp imunes para você baixar
-Como usar: Envie .wppim
 
 ❑ .url2img ❑
 Função: tirar um print de uma página da internet
