@@ -7,6 +7,7 @@ const {
 } = require('@adiwajshing/baileys')
 const { color, bgcolor } = require('./lib/color')
 const { help } = require('./src/help')
+const horos = require('./src/horoscopo')
 const { wait, simih, getBuffer, h2k, generateMessageID, getGroupAdmins, getRandom, banner, start, info, success, close } = require('./lib/functions')
 const { fetchJson } = require('./lib/fetcher')
 const { recognize } = require('./lib/ocr')
@@ -513,8 +514,7 @@ ${prefix}votobroad - Faz uma transmissão da votação para todos que usam o bot
 			if (!isGroup && !isCmd) console.log('\x1b[1;31m~\x1b[1;37m>', '[\x1b[1;31mRECV\x1b[1;37m]', time, color('Message'), 'from', color(sender.split('@')[0]), 'args :', color(args.length))
 			if (isCmd && isGroup) console.log('\x1b[1;31m~\x1b[1;37m>', '[\x1b[1;32mEXEC\x1b[1;37m]', time, color(command), 'from', color(sender.split('@')[0]), 'in', color(groupName), 'args :', color(args.length))
 			if (!isCmd && isGroup) console.log('\x1b[1;31m~\x1b[1;37m>', '[\x1b[1;31mRECV\x1b[1;37m]', time, color('Message'), 'from', color(sender.split('@')[0]), 'in', color(groupName), 'args :', color(args.length))
-			if(isCmd && blockeds.includes(sender)) return reply(`❌ NÚMERO BLOQUEADO POR NÃO CUMPRIR AS REGRAS, ENTRE EM CONTATO COM O PROPRIETÁRIO DO BOT PARA SABER COMO USAR OS MEUS COMANDOS ❌ 
-NÚMERO DO PROPRIETÁRIO DO BOT>> Wa.me/+5521982882464`)
+			if(isCmd && blockeds.includes(sender)) return reply(`*Seu número está bloqueado por uso indevido do BOT, para maiores informações peça ajuda aos administradores do grupo.*`)
 			if(type == MessageType.video) {
 				if(isMedia && mek.message.videoMessage.seconds < 20 && isAntiPornVid) {
 					const encmedia = mek
@@ -586,7 +586,7 @@ NÚMERO DO PROPRIETÁRIO DO BOT>> Wa.me/+5521982882464`)
 					})
 				}
 			}
-			if (isAntiPornImg && isBotGroupAdmins && type == MessageType.image) {
+			if (isAntiPornImg && isBotGroupAdmins && type == MessageType.image && !isGroupAdmins) {
 				savedFilename = await client.downloadAndSaveMediaMessage (mek)
 				ran = getRandom('.'+savedFilename.split('.')[1])
 				const upload = await uploadimg('BOT SOPHIA', savedFilename, ran)
@@ -827,8 +827,72 @@ NÚMERO DO PROPRIETÁRIO DO BOT>> Wa.me/+5521982882464`)
 				}
 			}
 			switch(command) {
-				case 'setfrase':
-
+				case 'gado':
+					buff= await getBuffer('https://cdn.brasildefato.com.br/media/96db3810e29d6d33206f14bd7ec5ebeb.jpg')
+					r = Math.floor(Math.random() * 100 + 0)
+					if(args.length < 1) {
+						if(isGroup) { num1 = mek.participant.slice(0, -15)+'@s.whatsapp.net'}
+						else{ num1 = mek.key.remoteJid.slice(0, -15)+'@s.whatsapp.net'}
+					}
+					else { num1 = args[0] 
+						if(!isNaN(num1.slice(1)))
+						{
+							if(num1.startsWith('@')) {num1 = num1.slice(1)+'@s.whatsapp.net'}
+						}
+					}
+					if(num1.slice(0, -15) == '') { num1 = num1+'@s.whatsapp.net'}
+					client.sendMessage(from, `*⌛Puxando a ficha do @${num1.slice(0, -15)}, aguarde...⌛*`, extendedText, {quoted: mek, contextInfo: { mentionedJid: [num1]}})
+					setTimeout(async function () {
+						if(r == 0) return client.sendMessage(from, buff, image, {caption: `*O @${num1.slice(0, -15)} não é gado*\n*mas talvez você seja 🤨`, quoted: mek, contextInfo: { mentionedJid: [num1]}})
+						if(r > 0 && r <= 33) return client.sendMessage(from, buff, image, {caption: `*O @${num1.slice(0, -15)} é ${r}% gado*\n*o que fala "ela é diferente poh"*`, quoted: mek, contextInfo: { mentionedJid: [num1]}})
+						if(r > 33 && r <= 66) return client.sendMessage(from, buff, image, {caption: `*O @${num1.slice(0, -15)} é ${r}% gado*\n*comprou água de banho da belle delphine ksksksk*`, quoted: mek, contextInfo: { mentionedJid: [num1]}})
+						if(r > 66 && r <= 100) return client.sendMessage(from, buff, image, {caption:`*O @${num1.slice(0, -15)} é ${r}% gado*\n*esse aí gastou todo o auxílio em pack do pé kkkkkk🤣🤣*`, quoted: mek, contextInfo: { mentionedJid: [num1]}})
+					}, 3000)
+					break
+				case 'gay':
+						buff = await getBuffer('https://www.economiasc.com/wp-content/uploads/2020/08/kit-2-bandeiras-gls-gay-lgbt-arco-iris-150m-x-090m-D_NQ_NP_819487-MLB28709953300_112018-F.jpg')
+					r = Math.floor(Math.random() * 100 + 0)
+					if(args.length < 1) {
+						if(isGroup) { num1 = mek.participant.slice(0, -15)+'@s.whatsapp.net'}
+						else{ num1 = mek.key.remoteJid.slice(0, -15)+'@s.whatsapp.net'}
+					}
+					else { num1 = args[0] 
+						if(!isNaN(num1.slice(1)))
+						{
+							if(num1.startsWith('@')) {num1 = num1.slice(1)+'@s.whatsapp.net'}
+						}
+					}
+					if(num1.slice(0, -15) == '') { num1 = num1+'@s.whatsapp.net'}
+					client.sendMessage(from, `*⌛Puxando a ficha do @${num1.slice(0, -15)}, aguarde...⌛*`, extendedText, {quoted: mek, contextInfo: { mentionedJid: [num1]}})
+					setTimeout(async function () {
+						if(r == 0) return client.sendMessage(from, buff, image, {caption: `*O @${num1.slice(0, -15)} não é gay*\n*mas talvez você seja 🤨`,quoted: mek, contextInfo: { mentionedJid: [num1]}})
+						if(r > 0 && r <= 33) return client.sendMessage(from, buff, image, {caption: `*O @${num1.slice(0, -15)} é ${r}% gay*\n*perdeu o bv com o amigo*`, quoted: mek, contextInfo: { mentionedJid: [num1]}})
+						if(r > 33 && r <= 66) return client.sendMessage(from, buff, image, {caption: `*O @${num1.slice(0, -15)} é ${r}% gay*\n*ta devendo 50 pro traveco 🤣🤣*`, quoted: mek, contextInfo: { mentionedJid: [num1]}})
+						if(r > 66 && r <= 100) return client.sendMessage(from, buff, image, {caption: `*O @${num1.slice(0, -15)} é ${r}% gay*\n*da o butico por 5 conto pra pagar o agiota 🤣🤣*`, quoted: mek, contextInfo: { mentionedJid: [num1]}})
+					}, 3000)
+					break
+				case 'corno':
+					buff= await getBuffer('http://www.clicrbs.com.br/blog/fotos/129960post_foto.jpg')
+					r = Math.floor(Math.random() * 100 + 0)
+					if(args.length < 1) {
+						if(isGroup) { num1 = mek.participant.slice(0, -15)+'@s.whatsapp.net'}
+						else{ num1 = mek.key.remoteJid.slice(0, -15)+'@s.whatsapp.net'}
+					}
+					else { num1 = args[0] 
+						if(!isNaN(num1.slice(1)))
+						{
+							if(num1.startsWith('@')) {num1 = num1.slice(1)+'@s.whatsapp.net'}
+						}
+					}
+					if(num1.slice(0, -15) == '') { num1 = num1+'@s.whatsapp.net'}
+					client.sendMessage(from, `*⌛Puxando a ficha do @${num1.slice(0, -15)}, aguarde...⌛*`, extendedText, {quoted: mek, contextInfo: { mentionedJid: [num1]}})
+					setTimeout(async function () {
+						if(num1.includes(OriginalOwner)) return reply('*Meu criador não é corno*\n*Mas pelo oq eu vi aq os dados me dizem ao contrário sobre você🤨*')
+						if(r == 0) return client.sendMessage(from, buff, image, {caption: `*O @${num1.slice(0, -15)} não é corno*\n*mas talvez você seja 🤨`, quoted: mek, contextInfo: { mentionedJid: [num1]}})
+						if(r > 0 && r <= 33) return client.sendMessage(from, buff, image, {caption: `*O @${num1.slice(0, -15)} é ${r}% corno*\n*jogador de free fire*`, quoted: mek, contextInfo: { mentionedJid: [num1]}})
+						if(r > 33 && r <= 66) return client.sendMessage(from, buff, image, {caption: `*O @${num1.slice(0, -15)} é ${r}% corno*\n*1km de chifre kkkkkkk*`, quoted: mek, contextInfo: { mentionedJid: [num1]}})
+						if(r > 66 && r <= 100) return client.sendMessage(from, buff, image, {caption: `*O @${num1.slice(0, -15)} é ${r}% corno*\n*pesca satélite com o chifre é? kkkkk🤣🤣*`, quoted: mek, contextInfo: { mentionedJid: [num1]}})
+					}, 3000)
 					break
 				case 'lyrics':
 					try {
@@ -888,27 +952,25 @@ NÚMERO DO PROPRIETÁRIO DO BOT>> Wa.me/+5521982882464`)
 					if(teks > 12) return reply('Escolha entre 1 e 12')
 					var signo;
 					if(teks == 1) signo = 'aries'
-					if(teks == 2) signo = 'taurus'
-					if(teks == 3) signo = 'aquarius'
-					if(teks == 4) signo = 'pisces'
-					if(teks == 5) signo = 'capricorn'
-					if(teks == 6) signo = 'gemini'
+					if(teks == 2) signo = 'touro'
+					if(teks == 3) signo = 'aquario'
+					if(teks == 4) signo = 'peixes'
+					if(teks == 5) signo = 'capricornio'
+					if(teks == 6) signo = 'gemeos'
 					if(teks == 7) signo = 'cancer'
-					if(teks == 8) signo = 'leo'
-					if(teks == 9) signo = 'virgo'
+					if(teks == 8) signo = 'leao'
+					if(teks == 9) signo = 'virgem'
 					if(teks == 10) signo = 'libra'
-					if(teks == 11) signo = 'scorpio'
-					if(teks == 12) signo = 'sagittarius'
-					aztroJs.getTodaysHoroscope(signo, async res => {
-						desc = (await translate(res.description, {to: 'pt'})).text
-						luck_number = (await translate(res.lucky_number, {to: 'pt'})).text
-						luck_time = (await translate(res.lucky_time, {to: 'pt'})).text
-						reply(`*Horoscopo do dia:* ${desc}\n*Número da sorte:* ${luck_number}\n*Hora da sorte:* ${luck_time}`)
+					if(teks == 11) signo = 'escorpiao'
+					if(teks == 12) signo = 'sagitario'
+					horos.horoshoje(signo).then(async (res) => {
+						buff = await getBuffer(res.img)
+						client.sendMessage(from, buff, image, {quoted: mek , caption: `${res.title}\n${res.body}`})
 					})
 					break
 				case 'horosemana':
 					teks = args[0]
-					if(isNaN(teks)) return reply(`Digite ${prefix}horoshelp para saber o número do seu signo`)
+					if(isNaN(teks)) return reply(`Digite ${prefix}singos para saber o número do seu signo`)
 					if(teks <= 0) return reply('Escolha entre 1 e 12')
 					if(teks > 12) return reply('Escolha entre 1 e 12')
 					var signo;
@@ -2794,7 +2856,8 @@ Tema: ${voto[0].tema}\n\n${teks}`, extendedText, {contextInfo: { mentionedJid: [
 								fs.unlinkSync(media)
 							}, 5000)
 						})
-					} else return reply(`*Marque a imagem com o comando .sticker ou coloque na legenda, o video ou gif só pode ter 6 segundos de duração, se sua figurinha sair falhada peça ajuda aos ADMs do grupo*`)
+					} else return reply(`*Se sua figurinha sair com falhas ou demorar mais de 2 min para ser criada use o comando .fsticker
+Caso o problema persista peça ajuda aos ADMs do grupo*`)
 				break
 				case 'fsticker':
 				case 'fstiker':

@@ -1,6 +1,16 @@
 [
   {
+    "jid": "120363040551028033@g.us",
+    "actived": false,
+    "blockedcmds": []
+  },
+  {
     "jid": "552799013169-1613658068@g.us",
+    "actived": false,
+    "blockedcmds": []
+  },
+  {
+    "jid": "120363019452877332@g.us",
     "actived": false,
     "blockedcmds": []
   }

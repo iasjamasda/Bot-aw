@@ -9,12 +9,42 @@
       },
       {
         "jid": "5511946817667@s.whatsapp.net",
-        "messages": 19,
-        "cmd_messages": 1
+        "messages": 29,
+        "cmd_messages": 2
       },
       {
         "jid": "554196660249@s.whatsapp.net",
-        "messages": 12,
+        "messages": 15,
+        "cmd_messages": 0
+      },
+      {
+        "jid": "5511930758170@s.whatsapp.net",
+        "messages": 10,
+        "cmd_messages": 0
+      },
+      {
+        "jid": "5521972298686@s.whatsapp.net",
+        "messages": 1,
+        "cmd_messages": 0
+      }
+    ]
+  },
+  {
+    "groupId": "120363040551028033@g.us",
+    "numbers": [
+      {
+        "jid": "557187645787@s.whatsapp.net",
+        "messages": 17,
+        "cmd_messages": 15
+      }
+    ]
+  },
+  {
+    "groupId": "120363019452877332@g.us",
+    "numbers": [
+      {
+        "jid": "559183423570@s.whatsapp.net",
+        "messages": 4,
         "cmd_messages": 0
       }
     ]

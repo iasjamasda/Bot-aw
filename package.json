@@ -26,6 +26,7 @@
     "axios": "^0.21.0",
     "aztro-js": "^0.1.5",
     "cfonts": "^2.9.0",
+    "cheerio": "^1.0.0-rc.10",
     "escape-string-regexp": "^1.0.5",
     "fake-useragent": "^1.0.1",
     "fluent-ffmpeg": "^2.1.2",
