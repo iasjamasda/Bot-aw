@@ -827,6 +827,22 @@ ${prefix}votobroad - Faz uma transmissão da votação para todos que usam o bot
 				}
 			}
 			switch(command) {
+				case 'delete':
+				case 'del':
+					try {
+						if (isGroup) {
+							if (!isGroupAdmins) return reply(mess.only.admin)
+							await client.deleteMessage(from, { id: mek.message.extendedTextMessage.contextInfo.stanzaId, remoteJid: from, fromMe: true })
+							reply('*Apagado com sucesso!!!*')
+						}
+						else {
+							await client.deleteMessage(from, { id: mek.message.extendedTextMessage.contextInfo.stanzaId, remoteJid: from, fromMe: true })
+							reply('*Apagado com sucesso!!!*')
+						}
+					} catch {
+						reply("Cite a minha mensagem para apagar.")
+					}
+				break
 				case 'gado':
 					buff= await getBuffer('https://cdn.brasildefato.com.br/media/96db3810e29d6d33206f14bd7ec5ebeb.jpg')
 					r = Math.floor(Math.random() * 100 + 0)

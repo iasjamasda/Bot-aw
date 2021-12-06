@@ -182,7 +182,6 @@ Como Usar: Envie .changepack + o nome que deseja no pacote da figurinha
 
 🔥 COMANDOS EXCLUSIVOS PARA PROPRIETÁRIOS 🔥
 
-
 ❑ .antipornimg ❑
 Função: ativa o anti porno de imagens
 Como Usar: .antipornimg 1 para ativar e .antipornimg 0 para desativar
@@ -239,6 +238,10 @@ Como Usar: Envie .gay e marque a pessoa que deseja
 Função: O Bot diz quantoporcento um membro do grupo é gado
 Como Usar: Envie .gado e marque o membro
 
+❑ .corno ❑
+Função: O Bot diz quanto por cento um membro do grupo é corno
+Como Usar: Envie .corno e marque o membro
+
 ❑ .gostoso ❑
 Função: O Bot diz quanto porcento o membro é gostoso
 Como Usar: Envie .gostoso e marque o membro
@@ -280,6 +283,10 @@ Como Usar: .setprefix [text|optional]
 Exemplo: .setprefix ?
 
 🔥 COMANDOS EXCLUSIVOS PARA ADMs 🔥
+
+❑ .del ou delete ❑
+Função: Deleta mensagem do bot para todos
+Como Usar: responda a imagem com o comando
 
 ❑ .abrirgp ❑
 Função: Abre o grupo para todos menos adms
