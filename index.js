@@ -2866,14 +2866,13 @@ Tema: ${voto[0].tema}\n\n${teks}`, extendedText, {contextInfo: { mentionedJid: [
 						execute(`ffmpeg -i ${media} -y -vcodec libwebp -filter_complex "[0:v] scale=512:512,fps=${framerate},pad=512:512:-1:-1:color=white@0.0,split[a][b];[a]palettegen=reserve_transparent=on:transparency_color=ffffff[p];[b][p]paletteuse" -f webp ${ran}`, function(err, res){
 							if(err) return reply('Deu erro, tente novamente :/')
 							client.sendMessage(from, fs.readFileSync(ran), sticker)
-							client.sendMessage(from, `*Se a figurinha sair parada ou com falha, repita o comando seguido de um número menor que 10*`, text, {quoted:mek})
+							client.sendMessage(from, `*Se sua figurinha sair com falhas ou demorar mais de 2 min para ser criada use o comando .fsticker*\n*Caso o problema persista peça ajuda aos ADMs do grupo*`, text, {quoted:mek})
 							setTimeout( async function(){
 								fs.unlinkSync(ran)
 								fs.unlinkSync(media)
 							}, 5000)
 						})
-					} else return reply(`*Se sua figurinha sair com falhas ou demorar mais de 2 min para ser criada use o comando .fsticker*
-*Caso o problema persista peça ajuda aos ADMs do grupo*`)
+					} else return reply(`*Responda uma foto/vídeo com o comando ${prefix}stiker*`)
 				break
 				case 'fsticker':
 				case 'fstiker':
@@ -2923,15 +2922,15 @@ Tema: ${voto[0].tema}\n\n${teks}`, extendedText, {contextInfo: { mentionedJid: [
 							.on('end', function () {
 								console.log('Finish')
 								client.sendMessage(from, fs.readFileSync(ran), sticker, {quoted: mek})
+								reply(`*Se sua figurinha sair com falhas ou demorar mais de 2 min para ser criada use o comando .fsticker*
+*Caso o problema persista peça ajuda aos ADMs do grupo*`)
 								fs.unlinkSync(media)
 								fs.unlinkSync(ran)
 							})
 							.addOutputOptions([`-vcodec`,`libwebp`,`-vf`,`scale='min(320,iw)':min'(320,ih)':force_original_aspect_ratio=decrease,fps=${framerate}, pad=320:320:-1:-1:color=white@0.0, split [a][b]; [a] palettegen=reserve_transparent=on:transparency_color=ffffff [p]; [b][p] paletteuse`])
 							.toFormat('webp')
 							.save(ran)
-					}
-					else return reply(`*Se sua figurinha sair com falhas ou demorar mais de 2 min para ser criada use o comando .fsticker*
-*Caso o problema persista peça ajuda aos ADMs do grupo*`)
+					} else return reply(`*Responda uma foto/vídeo com o comando ${prefix}stiker*`)
 				break
 				case 'gtts':
 					if (args.length < 1) return client.sendMessage(from, 'CADE A PRR DO CODIGO DO IDIOMA???', text, {quoted: mek})
