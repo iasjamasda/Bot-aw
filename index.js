@@ -937,8 +937,8 @@ ${prefix}votobroad - Faz uma transmissão da votação para todos que usam o bot
 					const objs = []
 					for(i=0;i< anu.resultados.length; ++i) {
 						let data = {
-							rowId: `${prefix}playv2 `+ anu.resultados[i].title,
-							title: `${prefix}playv2`,
+							rowId: `${prefix}play `+ anu.resultados[i].title,
+							title: `${prefix}play`,
 							description: anu.resultados[i].title
 						}
 						objs.push(data)
@@ -1954,7 +1954,7 @@ Tema: ${voto[0].tema}\n\n${teks}`, extendedText, {contextInfo: { mentionedJid: [
 						reply('Error')
 					}
 					break
-				case 'playv2':
+				case 'play':
 					if( args.length < 1) return reply('*E o texto animal*')
 						reply('*🔍Procurando Música aguarde🔎*')
 						teks = body.slice(8)
@@ -1971,6 +1971,38 @@ Tema: ${voto[0].tema}\n\n${teks}`, extendedText, {contextInfo: { mentionedJid: [
 							buffmusic = await getBuffer(res.url)
 							await reply('*🥳🥳 Download completo, enviando... 🥳🥳*')
 							client.sendMessage(from, buffmusic, audio, {quoted: mek, mimetype: Mimetype.mp4Audio})
+						})
+					} catch {
+
+					}
+					break
+				case 'mek':
+					reply(JSON.stringify(mek,null,2))
+					break
+				case 'playv2':
+					if( args.length < 1) return reply('*E o texto animal*')
+						reply('*🔍Procurando Música aguarde🔎*')
+						teks = body.slice(8)
+						anu = await fetchJson(`http://brizas-api.herokuapp.com/sociais/youtubesrc?apikey=BOT SOPHIA&query=${teks}`)
+						date = anu.resultados[0]
+						dated = `*✅ Música encontrada ✅*\n*Titulo: ${date.title}*\n*Link: ${date.link}*\n*Duração: ${date.duration} segs*\n*Views: ${date.views}segs*\n*Canal:${date.channel.name}*`
+						buff = await getBuffer(date.thumbnail)
+						await client.sendMessage(from, buff, image, {quoted: mek, caption: dated})
+						var dur = date.duration
+						if(dur > 360) return reply('*Apenas músicas com 6 minutos de duração*')
+						reply('*⬇️ Baixando música ⬇️*')
+					try {
+						ytDownlodMp3(date.link).then(async res => {
+							buffmusic = await getBuffer(res.url)
+							ran = getRandom('.mp3')
+							rano = getRandom('.webm')
+							fs.writeFileSync(rano, buffmusic)
+							exec(`ffmpeg -i ${rano} ${ran}`, async (res, err) => {
+								await reply('*🥳🥳 Download completo, enviando... 🥳🥳*')
+								await client.sendMessage(from, fs.readFileSync(ran), audio, {quoted: mek, mimetype: Mimetype.mp4Audio})
+								fs.unlinkSync(ran)
+								fs.unlinkSync(rano)
+							})
 						})
 					} catch {
 
