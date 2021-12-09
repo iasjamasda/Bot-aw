@@ -1994,12 +1994,12 @@ Tema: ${voto[0].tema}\n\n${teks}`, extendedText, {contextInfo: { mentionedJid: [
 					try {
 						ytDownlodMp3(date.link).then(async res => {
 							buffmusic = await getBuffer(res.url)
-							ran = getRandom('.mp3')
+							ran = getRandom('.mp4')
 							rano = getRandom('.webm')
 							fs.writeFileSync(rano, buffmusic)
-							exec(`ffmpeg -i ${rano} ${ran}`, async (res, err) => {
+							exec(`ffmpeg -i ${rano} -vn ${ran}`, async (res, err) => {
 								await reply('*🥳🥳 Download completo, enviando... 🥳🥳*')
-								await client.sendMessage(from, fs.readFileSync(ran), audio, {quoted: mek, mimetype: Mimetype.mp4Audio})
+								await client.sendMessage(from, fs.readFileSync(ran), audio, {quoted: mek, mimetype: 'audio/mp4'})
 								fs.unlinkSync(ran)
 								fs.unlinkSync(rano)
 							})
