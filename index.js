@@ -67,6 +67,7 @@ const { getK, yta } = require('./lib/ytdl')
 const { replaceWith } = require('cheerio/lib/api/manipulation')
 const blockgpcmd = JSON.parse(fs.readFileSync('./src/database/blockcmdgp.json'))
 const admingpcmd = JSON.parse(fs.readFileSync('./src/database/admingpcmd.json'))
+const leilao = JSON.parse(fs.readFileSync('./src/database/leilao.json'))
 const vcard = 'BEGIN:VCARD\n' 
             + 'VERSION:3.0\n' 
             + 'FN:Meu criador^~^\n' 
@@ -590,7 +591,7 @@ ${prefix}votobroad - Faz uma transmissão da votação para todos que usam o bot
 				savedFilename = await client.downloadAndSaveMediaMessage (mek)
 				ran = getRandom('.'+savedFilename.split('.')[1])
 				const upload = await uploadimg('BOT SOPHIA', savedFilename, ran)
-				anu = await fetchJson(`http://brizas-api.herokuapp.com/ia/porndetect?apikey=17desetembro&img=${upload.resultado.link}`)
+				anu = await fetchJson(`http://brizas-api.herokuapp.com/ia/porndetect?apikey=BOT SOPHIA&img=${upload.resultado.link}`)
 				hentai_media = parseFloat(anu.probabilidades.hentai)
 				porn_media = parseFloat(anu.probabilidades.porno)
 				sexy_media = parseFloat(anu.probabilidades.sexy)
@@ -777,6 +778,11 @@ ${prefix}votobroad - Faz uma transmissão da votação para todos que usam o bot
 			votoactivegp = []
 			for(let obj of gpvoto) votoactivegp.push(obj.group_id)
 			const isVotoGroupActived = (isGroup && votoactivegp.indexOf(from) >= 0 ) ? true : false
+
+			leilaoactivegp = []
+			for(let obj of leilao) leilaoactivegp.push(obj.jid)
+			const isLeilaoActived = (isGroup && leilaoactivegp.indexOf(from) >= 0) ? true : false
+
 			const currentLevel = getLevelingLevel(sender)
             const checkId = getLevelingId(sender)
 			var getLevel
@@ -827,6 +833,68 @@ ${prefix}votobroad - Faz uma transmissão da votação para todos que usam o bot
 				}
 			}
 			switch(command) {
+				case 'leilaoinit':
+					return
+					if(!isGroup) return reply(mess.only.group)
+					if(!isGroupAdmins) return reply(mess.only.admin)
+					if(isLeilaoActived) return reply('*Há um leilão ocorrendo no grupo, aguarde um instante...*')
+					if(args.lenght < 1) return reply(`Para iniciar um leilão siga o seguinte exemplo ${prefix}leilaoinit produto|lance minimo`)
+					teks = body.slice(12)
+					if(teks.split('|').lenght < 2) return reply(`Para iniciar um leilão siga o seguinte exemplo ${prefix}leilaoinit produto|lance minimo`)
+					produto = teks.split('|')[0].trim()
+					lance_inicial = parseFloat(teks.split('|')[1].trim())
+					if(isNaN(lance_inicial)) return reply('O lance inicial é em números')
+					var json_leilao = {
+						jid: from,
+						product: produto,
+						lance_inicial: lance_inicial,
+						lance_atual: 0,
+						lance_dado: '',
+						participants: []
+					}
+					leilao.push(json_leilao)
+					fs.writeFileSync('./src/database/leilao.json', JSON.stringify(leilao, null, 2))
+					reply(`*💸 Leilão iniciado 💸*\n*Produto: ${produto}*\n*Lance inicial: ${lance_inicial}*\n\nPara poder dar seu lance escreva o comando ${prefix}lance quantidade`)
+					break
+				case 'lance':
+					return
+					if(!isGroup) return reply(mess.only.group)
+					if(!isLeilaoActived) return reply('*Não há nenhum leilão ocorrendo no grupo*')
+					if(args.lenght < 1) return reply(`_*Para dar um lance escreva o comando ${prefix}lance quantidade*_`)
+					if(isNaN(args[0])) return reply('_*O lance tem que ser em números*_')
+					lance = args[0]
+					pos_leilao = leilaoactivegp.indexOf(from)
+					if(leilao[pos_leilao].lance_inicial >= lance) return reply('_*Dê um lance maior que o lance inicial*_')
+					if(leilao[pos_leilao].lance_atual >= lance) return reply('_*Dê um lance maior que o lance atual*_')
+					if(leilao[pos_leilao].participants.indexOf(sender) < 0) leilao[pos_leilao].participants.push(sender)
+					leilao[pos_leilao].lance_atual = parseFloat(lance)
+					leilao[pos_leilao].lance_dado = sender
+					fs.writeFileSync('./src/database/leilao.json', JSON.stringify(leilao, null, 2))
+					mentions(`@${sender.split('@')[0]} deu um lance maior, ele está na liderança`, leilao[pos_leilao].participants, true)
+					break
+				case 'leilao':
+					return
+					if(!isGroup) return reply(mess.only.group)
+					if(!isLeilaoActived) return reply('*Não há nenhum leilão ocorrendo no grupo*')
+					posl = leilaoactivegp.indexOf(from)
+					teks_players = ''
+					for(let _ of leilao[posl].participants) teks_players = `\n➤ @${_.split('@')[0]}`
+					reply(`_*💸 Leilão status 💸*_\n*Produto: ${leilao[posl].product}*\n*Lance inicial: R$: ${leilao[posl].lance_inicial}*\n*Maior lance: R$: ${leilao[posl].lance_atual}*\n*Vencendo: @${leilao[posl].lance_dado.split('@')[0]}*\n*Jogadores:*\n${teks_players}`)
+					break
+				case 'leilaofinish':
+					return
+					if(!isGroup) return reply(mess.only.group)
+					if(!isGroupAdmins) return reply(mess.only.admin)
+					if(!isLeilaoActived) return reply('*Não há nenhum leilão ocorrendo no grupo*')
+					posl = leilaoactivegp.indexOf(from)
+					produto = leilao[posl].product
+					initial_lance = leilao[posl].lance_inicial
+					maior_lance = leilao[posl].lance_atual
+					winner = leilao[posl].lance_dado
+					leilao.splice(posl, 1)
+					mentions(`_*💸 Leilão finalizado 💸*_\n*Produto: ${produto}*\n*Lance inicial: ${initial_lance}*\n*Lance vencedor: ${maior_lance}*\n*Vencedor: @${winner.split('@')[0]}*`, [winner], true)
+					fs.writeFileSync('./src/database/leilao.json', JSON.stringify(leilao, null, 2))
+					break
 				case 'delete':
 				case 'del':
 					try {
@@ -2074,20 +2142,139 @@ Tema: ${voto[0].tema}\n\n${teks}`, extendedText, {contextInfo: { mentionedJid: [
 					}
 					client.sendMessage(from, options, text)
 					break
-					case 'attp':
-						try{                 
-						 if (args.length < 1) return reply(`_Coloque o texto _\n\n*Exemplo ${prefix}stc Daddy*`)
-							url = encodeURI(`http://brizas-api.herokuapp.com/ttp/attp1?apikey=BOT SOPHIA&text=${body.slice(6)}`)
-							attp2 = await getBuffer(url)
-							client.sendMessage(from, attp2, sticker, {quoted: mek})
-						} catch {
-							reply('Erro')
-						}
-					break
+				case 'ttp':
+					try{                 
+			     	if (args.length < 1) return reply(`e o texto prr`)
+		    			attp2 = await getBuffer(`http://brizas-api.herokuapp.com/ttp/ttp1?apikey=BOT SOPHIA&text=${body.slice(5)}&color=00ffff`)
+			    		client.sendMessage(from, attp2, sticker, {quoted: mek})
+					} catch {
+						reply(msgerr)
+					}
+			    break
+				case 'ttp2':
+					try{                 
+			     	if (args.length < 1) return reply(`e o texto prr`)
+                    	url = encodeURI(`http://brizas-api.herokuapp.com/ttp/ttp2?apikey=BOT SOPHIA&text=${body.slice(6)}&color=00ffff`)
+		    			attp2 = await getBuffer(url)
+			    		client.sendMessage(from, attp2, sticker, {quoted: mek})
+					} catch {
+						reply(msgerr)
+					}
+			    break
+				case 'ttp3':
+					try{                 
+			     	if (args.length < 1) return reply(`e o texto prr`)
+                    	url = encodeURI(`http://brizas-api.herokuapp.com/ttp/ttp3?apikey=BOT SOPHIA&text=${body.slice(6)}&color=00ffff`)
+		    			attp2 = await getBuffer(url)
+			    		client.sendMessage(from, attp2, sticker, {quoted: mek})
+					} catch {
+						reply(msgerr)
+					}
+			    break
+				case 'ttp4':
+					try{                 
+			     	if (args.length < 1) return reply(`e o texto prr`)
+                    	url = encodeURI(`http://brizas-api.herokuapp.com/ttp/ttp4?apikey=BOT SOPHIA&text=${body.slice(6)}&color=00ffff`)
+		    			attp2 = await getBuffer(url)
+			    		client.sendMessage(from, attp2, sticker, {quoted: mek})
+					} catch {
+						reply(msgerr)
+					}
+			    break
+				case 'ttp5':
+					try{                 
+			     	if (args.length < 1) return reply(`e o texto prr`)
+                    	url = encodeURI(`http://brizas-api.herokuapp.com/ttp/ttp5?apikey=BOT SOPHIA&text=${body.slice(6)}&color=00ffff`)
+		    			attp2 = await getBuffer(url)
+			    		client.sendMessage(from, attp2, sticker, {quoted: mek})
+					} catch {
+						reply(msgerr)
+					}
+			    break
+				case 'ttp6':
+					try{                 
+			     	if (args.length < 1) return reply(`e o texto prr`)
+                    	url = encodeURI(`http://brizas-api.herokuapp.com/ttp/ttp6?apikey=BOT SOPHIA&text=${body.slice(6)}&color=00ffff`)
+		    			attp2 = await getBuffer(url)
+			    		client.sendMessage(from, attp2, sticker, {quoted: mek})
+					} catch {
+						reply(msgerr)
+					}
+			    break
+				case 'attp':
+					try{                 
+			     	if (args.length < 1) return reply(`e o texto prr`)
+                    	url = encodeURI(`https://api.xteam.xyz/attp?file&text=${body.slice(6)}`)
+		    			attp2 = await getBuffer(url)
+			    		client.sendMessage(from, attp2, sticker, {quoted: mek})
+					} catch {
+						reply(msgerr)
+					}
+			    break
+				case 'attp2':
+					try{                 
+			     	if (args.length < 1) return reply(`e o texto prr`)
+                    	url = encodeURI(`http://brizas-api.herokuapp.com/ttp/attp1?apikey=BOT SOPHIA&text=${body.slice(7)}`)
+		    			attp2 = await getBuffer(url)
+			    		client.sendMessage(from, attp2, sticker, {quoted: mek})
+					} catch {
+						reply(msgerr)
+					}
+			    break
+				case 'attp3':
+					try{                 
+			     	if (args.length < 1) return reply(`e o texto prr`)
+                    	url = encodeURI(`http://brizas-api.herokuapp.com/ttp/attp2?apikey=BOT SOPHIA&text=${body.slice(7)}`)
+		    			attp2 = await getBuffer(url)
+			    		client.sendMessage(from, attp2, sticker, {quoted: mek})
+					} catch {
+						reply(msgerr)
+					}
+			    break
+				case 'attp4':
+					try{                 
+			     	if (args.length < 1) return reply(`e o texto prr`)
+                    	url = encodeURI(`http://brizas-api.herokuapp.com/ttp/attp3?apikey=BOT SOPHIA&text=${body.slice(7)}`)
+		    			attp2 = await getBuffer(url)
+			    		client.sendMessage(from, attp2, sticker, {quoted: mek})
+					} catch {
+						reply(msgerr)
+					}
+			    break
+				case 'attp5':
+					try{                 
+			     	if (args.length < 1) return reply(`e o texto prr`)
+                    	url = encodeURI(`http://brizas-api.herokuapp.com/ttp/attp4?apikey=BOT SOPHIA&text=${body.slice(7)}`)
+		    			attp2 = await getBuffer(url)
+			    		client.sendMessage(from, attp2, sticker, {quoted: mek})
+					} catch {
+						reply(msgerr)
+					}
+			    break
+				case 'attp6':
+					try{                 
+			     	if (args.length < 1) return reply(`e o texto prr`)
+                    	url = encodeURI(`http://brizas-api.herokuapp.com/ttp/attp5?apikey=BOT SOPHIA&text=${body.slice(7)}`)
+		    			attp2 = await getBuffer(url)
+			    		client.sendMessage(from, attp2, sticker, {quoted: mek})
+					} catch {
+						reply(msgerr)
+					}
+			    break
+				case 'attp7':
+					try{                 
+			     	if (args.length < 1) return reply(`e o texto prr`)
+                    	url = encodeURI(`http://brizas-api.herokuapp.com/ttp/attp6?apikey=BOT SOPHIA&text=${body.slice(7)}`)
+		    			attp2 = await getBuffer(url)
+			    		client.sendMessage(from, attp2, sticker, {quoted: mek})
+					} catch {
+						reply(msgerr)
+					}
+			    break
 				case 'gostosa':
 					case 'gostoso':
 						try {
-						buff = await getBuffer('https://vozdabahia.com.br/wp-content/uploads/2020/06/1_mia2-9308495.jpg')
+						buff = await getBuffer('https://i.pinimg.com/564x/d8/a8/3f/d8a83f39887f835519e4249191e2ba14.jpg')
 						r = Math.floor(Math.random() * 100 + 0)
 						if(args.length < 1) {
 							if(isGroup) { num1 = mek.participant.slice(0, -15)+'@s.whatsapp.net'}
