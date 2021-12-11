@@ -1,6 +1,60 @@
 const help = (prefix) => {
 	return `💎 • Comandos da BOT-SOPHIA• 💎  
 
+🌈 TTPs 🌈
+
+❑ .ttp ❑
+Função: converte texto em um figurinha
+Como Usar: Envie .ttp + O Texto que você quer transformar em figurinha]
+
+❑ .ttp2 ❑
+Função: converte texto em um figurinha
+Como Usar: Envie .ttp2 + O Texto que você quer transformar em figurinha
+
+❑ .ttp3 ❑
+Função: converte texto em um figurinha
+Como Usar: Envie .ttp3 + O Texto que você quer transformar em figurinha
+
+❑ .ttp4 ❑
+Função: converte texto em um figurinha
+Como Usar: Envie .ttp4 + O Texto que você quer transformar em figurinha
+
+❑ .ttp5 ❑
+Função: converte texto em um figurinha
+Como Usar: Envie .ttp5 + O Texto que você quer transformar em figurinha
+
+❑ .ttp6 ❑
+Função: converte texto em um figurinha
+Como Usar: Envie .ttp6 + O Texto que você quer transformar em figurinha
+
+❑ .attp ❑
+Função: converte texto em um figurinha
+Como Usar: Envie .attp + O Texto que você quer transformar em figurinha
+
+❑ .attp2 ❑
+Função: converte texto em um figurinha
+Como Usar: Envie .attp2 + O Texto que você quer transformar em figurinha
+
+❑ .attp3 ❑
+Função: converte texto em um figurinha
+Como Usar: Envie .attp3 + O Texto que você quer transformar em figurinha
+
+❑ .attp4 ❑
+Função: converte texto em um figurinha
+Como Usar: Envie .attp4 + O Texto que você quer transformar em figurinha
+
+❑ .attp5 ❑
+Função: converte texto em um figurinha
+Como Usar: Envie .attp5 + O Texto que você quer transformar em figurinha
+
+❑ .attp6 ❑
+Função: converte texto em um figurinha
+Como Usar: Envie .attp6 + O Texto que você quer transformar em figurinha
+
+❑ .attp7 ❑
+Função: converte texto em um figurinha
+Como Usar: Envie .attp7 + O Texto que você quer transformar em figurinha
+
 🔮 HORÓSCOPO 🔮
 
 ❑ .signos ❑
@@ -92,10 +146,6 @@ Como Usar: Envie a imagem,gif ou vídeo marque e responda com o comando .nsticke
 Função: Troca o nome de pacote e autor da figurinha
 Como Usar: Responda a figurinha com .rename pacote | autor
 
-❑ .attp ❑
-Função: converte texto em um figurinha animada
-Como Usar: Envie .attp + O Texto que você quer transformar em figurinha
-
 ❑ .fsticker ou .fstiker ❑
 Função: converter imagem / gif / vídeo em figurinha sem alterar o tamanho
 Como Usar: Envie a imagem,gif ou vídeo marque ele e responda com o comando .fsticker
@@ -109,6 +159,10 @@ Como Usar: Envie um sticker marque ele e responda com o comando .togif
 ❑ .ytsrc ❑
 Função: Manda uma mensagem lista com músicas referentes
 Como Usar: .ytsrc palavra chave
+
+❑ .play ❑
+Função: procura e baixa músicas do youtube
+Como Usar: .play + o título exato do vídeo que você quer a música
 
 ❑ .playv2 ❑
 Função: procura e baixa músicas do youtube

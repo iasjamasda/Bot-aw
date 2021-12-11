@@ -1,9 +1,9 @@
 [
   {
     "id": "557187645787@s.whatsapp.net",
-    "xp": 13601,
-    "level": 2,
-    "patent": "🥉 Bronze III"
+    "xp": 16701,
+    "level": 3,
+    "patent": "🥉 Bronze II"
   },
   {
     "id": "559186105547@s.whatsapp.net",
@@ -134,6 +134,12 @@
   {
     "id": "559183423570@s.whatsapp.net",
     "xp": 201,
+    "level": 1,
+    "patent": "🥉 Bronze IV"
+  },
+  {
+    "id": "557193772422@s.whatsapp.net",
+    "xp": 301,
     "level": 1,
     "patent": "🥉 Bronze IV"
   }
