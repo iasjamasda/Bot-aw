@@ -112,7 +112,6 @@ async function ytDownlodMp3(url) {
 	  } catch (error) {
 		  reject(error);
 		}
-		console.log(error)
 	})
   }
 
@@ -526,7 +525,6 @@ ${prefix}votobroad - Faz uma transmissão da votação para todos que usam o bot
 						anu = await fetchJson(`http://brizas-api.herokuapp.com/ia/porngifdetect?apikey=BOT SOPHIA&img=${upload.resultado.link}`)
 						porn_media = parseFloat(anu.result_media.porno)
 						hentai_media = parseFloat(anu.result_media.hentai)
-						console.log(hentai_media)
 						sexy_media = parseFloat(anu.result_media.sexy)
 						if(!isGroupAdmins && isBotGroupAdmins) {
 							if(porn_media >= 50) {
@@ -557,7 +555,6 @@ ${prefix}votobroad - Faz uma transmissão da votação para todos que usam o bot
 					execute(`ffmpeg -i ${media} -fs 3M -ss 00:00:00 -to 00:00:${durpornvid[0]} -vf "fps=5,scale=320:-1:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse" -loop 0 ${ran}`).then(async (res, err) => {
 						const upload = await uploadimg('BOT SOPHIA', ran, ran)
 						anu = await fetchJson(`http://brizas-api.herokuapp.com/ia/porngifdetect?apikey=BOT SOPHIA&img=${upload.resultado.link}`)
-						console.log(anu)
 						porn_media = parseFloat(anu.result_media.porno)
 						hentai_media = parseFloat(anu.result_media.hentai)
 						sexy_media = parseFloat(anu.result_media.sexy)
@@ -818,7 +815,6 @@ ${prefix}votobroad - Faz uma transmissão da votação para todos que usam o bot
 					if (requiredXp <= getLevelingXp(sender)) {
 						await addLevelingLevel(sender, 1)
 						await checkPatente()
-						console.log(getLevelingPatent(sender))
 						reply(levelup(pushname, sender, getLevelingXp,  getLevel, getLevelingLevel, getLevelingPatent(sender)))
 					}
 				} else {

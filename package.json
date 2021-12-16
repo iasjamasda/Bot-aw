@@ -20,7 +20,7 @@
   "author": "MhankBarBar",
   "license": "ISC",
   "dependencies": {
-    "@adiwajshing/baileys": "github:ianmsfvenom/baileys",
+    "@adiwajshing/baileys": "^3.5.3",
     "@kagchi/kag-api": "^1.5.5",
     "async": "^2.4.1",
     "axios": "^0.21.0",
