@@ -68,6 +68,13 @@ const { replaceWith } = require('cheerio/lib/api/manipulation')
 const blockgpcmd = JSON.parse(fs.readFileSync('./src/database/blockcmdgp.json'))
 const admingpcmd = JSON.parse(fs.readFileSync('./src/database/admingpcmd.json'))
 const leilao = JSON.parse(fs.readFileSync('./src/database/leilao.json'))
+const antispamsticker = new Set()
+
+const isFiltered = (from) => !!antispamsticker.has(from)
+const addFilter = (from) => {
+    antispamsticker.add(from)
+    setTimeout(() => antispamsticker.delete(from), 3000)
+}
 const vcard = 'BEGIN:VCARD\n' 
             + 'VERSION:3.0\n' 
             + 'FN:Meu criador^~^\n' 
@@ -78,7 +85,6 @@ prefix = '.'
 support_prefix = ['.', '#', '$', '@', '!', "*", '+', '-', '&', '%', '/', '>', '<', ':', ';']
 blocked = []
 isAvised = []
-
 async function ytDownlodMp3(url) {
 	return new Promise((resolve, reject) => {
 	  try {
@@ -366,7 +372,7 @@ async function starts() {
 			const apiKey = 'Your-Api-Key'
 			const { text, extendedText, contact, location, liveLocation, image, video, sticker, document, audio, product } = MessageType
 			const time = moment.tz('Asia/Jakarta').format('DD/MM HH:mm:ss')
-			body = (type === 'conversation' && mek.message.conversation.startsWith(prefix)) ? mek.message.conversation : (type == 'imageMessage') && mek.message.imageMessage.caption.startsWith(prefix) ? mek.message.imageMessage.caption : (type == 'videoMessage') && mek.message.videoMessage.caption.startsWith(prefix) ? mek.message.videoMessage.caption : (type == 'extendedTextMessage') && mek.message.extendedTextMessage.text.startsWith(prefix) ? mek.message.extendedTextMessage.text : (mek.message.listResponseMessage && mek.message.listResponseMessage.singleSelectReply.selectedRowId.startsWith(prefix) && mek.message.listResponseMessage.singleSelectReply.selectedRowId) ? mek.message.listResponseMessage.singleSelectReply.selectedRowId: ''
+			body = (type === 'conversation' && mek.message.conversation && mek.message.conversation.startsWith(prefix)) ? mek.message.conversation : ((type == 'imageMessage') && mek.message.imageMessage.caption && mek.message.imageMessage.caption.startsWith(prefix)) ? mek.message.imageMessage.caption : ((type == 'videoMessage') && mek.message.videoMessage.caption && mek.message.videoMessage.caption.startsWith(prefix)) ? mek.message.videoMessage.caption : ((type == 'extendedTextMessage') && mek.message.extendedTextMessage.text && mek.message.extendedTextMessage.text.startsWith(prefix)) ? mek.message.extendedTextMessage.text : (mek.message.listResponseMessage && mek.message.listResponseMessage.singleSelectReply.selectedRowId.startsWith(prefix) && mek.message.listResponseMessage.singleSelectReply.selectedRowId) ? mek.message.listResponseMessage.singleSelectReply.selectedRowId: ''
 			budy = (type === 'conversation') ? mek.message.conversation : (type === 'extendedTextMessage') ? mek.message.extendedTextMessage.text : ''
 			bady = (type === 'conversation') ? mek.message.conversation : (type == 'imageMessage') && mek.message.imageMessage.caption ? mek.message.imageMessage.caption : (type == 'videoMessage') && mek.message.videoMessage.caption ? mek.message.videoMessage.caption : (type == 'extendedTextMessage') ? mek.message.extendedTextMessage.text : (mek.message.listResponseMessage && mek.message.listResponseMessage.singleSelectReply.selectedRowId) ? mek.message.listResponseMessage.singleSelectReply.selectedRowId: ''
 			
@@ -828,6 +834,7 @@ ${prefix}votobroad - Faz uma transmissão da votação para todos que usam o bot
 					if(obj.question.toLowerCase() == bady) return reply(obj.answer)
 				}
 			}
+
 			switch(command) {
 				case 'leilaoinit':
 					return

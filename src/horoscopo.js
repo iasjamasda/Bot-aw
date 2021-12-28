@@ -20,7 +20,7 @@ const horoshoje = (signo) => {
             if(!horosdata) reject(fail)
             if(!thumb) reject(fail)
             var json = {
-                img: thumb,
+                img: 'https://www.somostodosum.com.br/horoscopo' + thumb.slice(2),
                 title: horosdata,
                 body: total
             }

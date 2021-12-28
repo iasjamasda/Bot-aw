@@ -1,9 +1,7 @@
 [
   {
     "jid": "120363040551028033@g.us",
-    "actived": true,
-    "blockedcmds": [
-      "menu"
-    ]
+    "actived": false,
+    "blockedcmds": []
   }
 ]

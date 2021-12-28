@@ -94,13 +94,18 @@
     "numbers": [
       {
         "jid": "557187645787@s.whatsapp.net",
-        "messages": 33,
-        "cmd_messages": 31
+        "messages": 43,
+        "cmd_messages": 36
       },
       {
         "jid": "557193772422@s.whatsapp.net",
         "messages": 4,
         "cmd_messages": 4
+      },
+      {
+        "jid": "553196189858@s.whatsapp.net",
+        "messages": 25,
+        "cmd_messages": 0
       }
     ]
   },
