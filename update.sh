@@ -1,5 +1,7 @@
 #!bin/bash
 
+GREEN="\033[1;32m"
+
 apt update && apt upgrade
 
 if [ ! -d "backup" ]; then
@@ -28,7 +30,7 @@ if [ -d "src/database" ]; then
 
 	rm -rf Bot-aw
 
-	echo "Bot sophia atualizado com sucesso!"
+	echo $GREEN"Bot sophia atualizado com sucesso!"
 
 fi
 
