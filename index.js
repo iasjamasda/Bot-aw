@@ -928,8 +928,8 @@ ${prefix}votobroad - Faz uma transmissão da votação para todos que usam o bot
 					if(!isOwner) return reply(mess.only.ownerB)
 					if(args.length < 1) return reply('Diga a pergunta e resposta e use | como separador')
 					teks = body.slice(7)
-					if(teks.split('|')[0]) return reply('Diga a pergunta e resposta e use | como separador')
-					if(teks.split('|')[1]) return reply('Diga a pergunta e resposta e use | como separador')
+					if(!teks.split('|')[0].trim() && teks.split('|')[0].trim().length < 1) return reply('Diga a pergunta e resposta e use | como separador')
+					if(!teks.split('|')[1].trim() && teks.split('|')[1].trim().length < 1) return reply('Diga a pergunta e resposta e use | como separador')
 					frases.push({
 						question: teks.split('|')[0].trim(),
 						answer: teks.split('|')[1].trim()
