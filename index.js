@@ -476,7 +476,7 @@ async function starts() {
 			const isAntiLink = isGroup ? antilink.includes(from) : false
 			const isAntiLinkHard = isGroup ? antilinkhard.includes(from) : false
 			const isWelkom = isGroup ? welkom.includes(from) : false
-			const isAutoReply = isGroup ? autoreply.includes(from) : false
+			const isAutoReply = autoreply.includes('Ativado')
 			const isNsfw = isGroup ? nsfw.includes(from) : false
 			const isAntiPv = (antipv.indexOf('Ativado') >= 0) ? true : false
 			const isSimi = isGroup ? samih.includes(from) : false
@@ -910,11 +910,11 @@ ${prefix}votobroad - Faz uma transmissão da votação para todos que usam o bot
 						if (args.length < 1) return reply('Hmmmm')
 						if (Number(args[0]) === 1) {
 							if (isAutoReply) return reply('Ja esta ativo')
-							autoreply.push(from)
+							autoreply[0] = 'Ativado'
 							fs.writeFileSync('./src/database/autoreply.json', JSON.stringify(autoreply))
 							reply('Ativou com sucesso o recurso de auto respostas neste grupo✔️')
 						} else if (Number(args[0]) === 0) {
-							autoreply.splice(from, 1)
+							autoreply[0] = ''
 							fs.writeFileSync('./src/database/autoreply.json', JSON.stringify(autoreply))
 							reply('Desativou com sucesso o recurso de auto respostas neste grupo✔️')
 						} else {
