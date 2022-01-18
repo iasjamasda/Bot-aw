@@ -12,6 +12,14 @@ Obs: Este comando pode ser usado se você for um administrador
 Função: Programa uma nova mensagem de pergunta e resposta
 Como Usar: .reply pergunta|resposta
 
+❑ .replylist ❑
+Função: Lista e fala a posição de cada pergunta
+Como Usar: .replylist
+
+❑ .replyrm ❑
+Função: Remove uma mensagem automatica de acordo com a posição
+Como Usar: .replyrm num
+
 🌈 TTPs 🌈
 
 ❑ .ttp ❑

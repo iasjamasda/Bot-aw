@@ -923,6 +923,23 @@ ${prefix}votobroad - Faz uma transmissão da votação para todos que usam o bot
 						reply('Falha')
 					}
 					break
+				case 'replyrm':
+					if(!isOwner) return reply(mess.only.ownerB)
+					if(args.length < 1) return reply('Fale o num da pergunta')
+					if(isNaN(args[0])) return reply('Fale o num da pergunta')
+					if(parseInt(args[0]) > frases.length && parseInt(args[0]) < 0) return reply('*Não foi encontrada a pergunta*')
+					frases.splice(parseInt(args[0]), 1)
+					fs.writeFileSync('./src/database/frase.json', JSON.stringify(frases, null, 2))
+					reply('*Pergunta removida com sucesso!*')
+					break
+				case 'replylist':
+					if(frases.length < 1) return reply('*Não há perguntas*')
+					teks = 'Todas perguntas e respostas do bot:\n\n '
+					for(i=0;i<frases.length;++i) {
+						teks += `${i}° _*Pergunta*: ${frases[i].question}_\n_*Resposta*: ${frases[i].answer}_\n\n`
+					}
+					reply(teks)
+					break
 				case 'reply':
 					if(!isOwner) return reply(mess.only.ownerB)
 					if(args.length < 1) return reply('Diga a pergunta e resposta e use | como separador')
