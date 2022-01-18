@@ -1,6 +1,17 @@
 const help = (prefix) => {
 	return `💎 • Comandos da BOT-SOPHIA• 💎  
 
+👅 AUTO RESPOSTAS 👅
+
+❑ .autoreply ❑
+Função: ativa respostas automaticas no grupo
+Como Usar: .autoreply 1 para ativar e .autoreply 0 para desativar
+Obs: Este comando pode ser usado se você for um administrador
+
+❑ .reply ❑
+Função: Programa uma nova mensagem de pergunta e resposta
+Como Usar: .reply pergunta|resposta
+
 🌈 TTPs 🌈
 
 ❑ .ttp ❑
@@ -256,6 +267,11 @@ Função: ativa o bloqueamento de pessoas que invade pv do bot
 Como Usar: .antipv 1 para ativar e .antipv 0 para desativar
 Obs: Este comando pode ser usado se você for um proprietário do bot
 
+❑ .antictt ❑
+Função: ativa o bloqueamento mensagens contato
+Como Usar: .antictt 1 para ativar e .antictt 0 para desativar
+Obs: Este comando pode ser usado se você for um administrador
+
 ❑ .welcomeadd ❑
 Função: Modifica a mensagem de boas-vindas de um membro
 Como Usar: .welcomeadd mensagem
@@ -287,6 +303,10 @@ Como usar: .ship (marcar1) (marcar2)
 ❑ .gay ❑
 Função: O Bot diz quanto porcento um membro do grupo é gay
 Como Usar: Envie .gay e marque a pessoa que deseja
+
+❑ .feio ❑
+Função: O Bot diz quanto porcento um membro do grupo é feio
+Como Usar: Envie .feio e marque a pessoa que deseja
 
 ❑ .gado ❑
 Função: O Bot diz quantoporcento um membro do grupo é gado
@@ -343,10 +363,18 @@ Função: Deleta mensagem do bot para todos
 Como Usar: responda a imagem com o comando
 
 ❑ .abrirgp ❑
-Função: Abre o grupo para todos menos adms
+Função: Abre o grupo para todos
+
+❑ .abrirhr ❑
+Como Usar: .abrirhr 15:00
+Função: Abre o grupo para todos em determinado horário
 
 ❑ .fechargp ❑
-Função: Fecha o grupo para todos menos adms
+Função: Fecha o grupo para todos
+
+❑ .fecharhr ❑
+Como Usar: .fecharhr 15:00
+Função: Fecha o grupo para todos em determinado horário
 
 ❑ .dontback ❑
 Função: Impede que determinado número entre no grupo

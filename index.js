@@ -46,6 +46,7 @@ const ytdl = require('ytdl-core');
 const durpornvid = JSON.parse(fs.readFileSync('./src/database/durpornvid.json'))
 const sticker_pack = JSON.parse(fs.readFileSync('./src/database/sticker_pack.json'))
 const antilink = JSON.parse(fs.readFileSync('./src/database/antilink.json'))
+const antictt = JSON.parse(fs.readFileSync('./src/database/antictt.json'))
 const antilinkhard = JSON.parse(fs.readFileSync('./src/database/antilinkhard.json'))
 const antifake = JSON.parse(fs.readFileSync('./src/database/antifake.json'))
 const antipornvid = JSON.parse(fs.readFileSync('./src/database/antipornvid.json'))
@@ -63,6 +64,11 @@ const samih = JSON.parse(fs.readFileSync('./src/database/simi.json'))
 const welcome_group = JSON.parse(fs.readFileSync('./src/database/welcome_group.json'))
 const bye_group = JSON.parse(fs.readFileSync('./src/database/bye_group.json'))
 const _level = JSON.parse(fs.readFileSync('./src/database/level.json'));
+
+const fechargp = JSON.parse(fs.readFileSync('./src/database/fechar.json'))
+const abrirgp = JSON.parse(fs.readFileSync('./src/database/abrir.json'))
+const cron = require('node-cron')
+
 const { getK, yta } = require('./lib/ytdl')
 const { replaceWith } = require('cheerio/lib/api/manipulation')
 const blockgpcmd = JSON.parse(fs.readFileSync('./src/database/blockcmdgp.json'))
@@ -249,6 +255,7 @@ function dataAtualFormatada(){
 async function starts() {
 	const client = new WAConnection()
 	client.version = [2, 2146, 9]
+	var connected = false
 	client.logger.level = 'warn'
 	console.log(banner.string)
 	client.on('qr', () => {
@@ -258,9 +265,11 @@ async function starts() {
 	fs.existsSync('./BarBar.json') && client.loadAuthInfo('./BarBar.json')
 	client.on('connecting', () => {
 		start('2', 'Connecting...')
+		connected = false
 	})
 	client.on('open', () => {
 		success('2', 'Connected')
+		connected = true
 	})
 	await client.connect({timeoutMs: 30*1000})
         fs.writeFileSync('./BarBar.json', JSON.stringify(client.base64EncodedAuthInfo(), null, '\t'))
@@ -355,6 +364,54 @@ async function starts() {
 	    	blocked.push(i.replace('c.us','s.whatsapp.net'))
 	    }
 	})
+	cron.schedule('* * * * *', async () => {
+		if(connected) {
+			var hour = new Date().getHours()
+			var minute = new Date().getMinutes()
+			for(i=0;i<fechargp.length;i++) {
+				const groupMetadata = await client.groupMetadata(fechargp[i].jid)
+				const groupAdmins = getGroupAdmins(groupMetadata.participants)
+				const isBotGroupAdmins = groupAdmins.includes(client.user.jid) || false
+				if(isBotGroupAdmins && !fechargp[i].disabled) {
+					if(hour == fechargp[i].hour) {
+						if(minute >= fechargp[i].minute && !fechargp[i].actived) {
+							if(fechargp[i].minute == minute) {
+								await client.sendMessage(fechargp[i].jid, '❌ FECHANDO GRUPO ❌', MessageType.text)
+								client.groupSettingChange(fechargp[i].jid, GroupSettingChange.messageSend, true)
+							}
+							if(fechargp[i].minute > minute) {
+								await client.sendMessage(fechargp[i].jid, '❌ FECHANDO GRUPO, DESCULPE-ME PELO ATRASO ❌', MessageType.text)
+								client.groupSettingChange(fechargp[i].jid, GroupSettingChange.messageSend, true)
+							}
+							fechargp[i].actived = true
+						}
+					} else if(hour > fechargp[i].hour) fechargp[i].actived = false 
+				}
+			}
+			fs.writeFileSync('./src/database/fechar.json', JSON.stringify(fechargp, null, 2))
+			for(i=0;i<abrirgp.length;++i) {
+				const groupMetadata = await client.groupMetadata(abrirgp[i].jid)
+				const groupAdmins = getGroupAdmins(groupMetadata.participants)
+				const isBotGroupAdmins = groupAdmins.includes(client.user.jid) || false
+				if(isBotGroupAdmins && !abrirgp[i].disabled) {
+					if(hour == abrirgp[i].hour) {
+						if(minute >= abrirgp[i].minute && !abrirgp[i].actived) {
+							if(abrirgp[i].minute == minute) {
+								await client.sendMessage(abrirgp[i].jid, '✅ ABRINDO GRUPO ✅', MessageType.text)
+								client.groupSettingChange(abrirgp[i].jid, GroupSettingChange.messageSend, false)
+							}
+							if(abrirgp[i].minute > minute) {
+								await client.sendMessage(abrirgp[i].jid, '✅ ABRINDO GRUPO, DESCULPE-ME PELO ATRASO ✅', MessageType.text)
+								client.groupSettingChange(abrirgp[i].jid, GroupSettingChange.messageSend, false)
+							}
+							abrirgp[i].actived = true
+						}
+					} else if(hour > abrirgp[i].hour) abrirgp[i].actived = false 
+				}
+			}
+			fs.writeFileSync('./src/database/abrir.json', JSON.stringify(abrirgp, null, 2))
+		}
+	})
 	client.on('chat-update', async (mek) => {
 		try {
 
@@ -416,13 +473,14 @@ async function starts() {
 			const isBotGroupAdmins = groupAdmins.includes(botNumber) || false
 			const isGroupAdmins = groupAdmins.includes(sender) || false
 			const isAntiFake = isGroup ? antifake.includes(from) : false
-			const isAutoReply = isGroup ? autoreply.includes(from) : false
 			const isAntiLink = isGroup ? antilink.includes(from) : false
 			const isAntiLinkHard = isGroup ? antilinkhard.includes(from) : false
 			const isWelkom = isGroup ? welkom.includes(from) : false
+			const isAutoReply = isGroup ? autoreply.includes(from) : false
 			const isNsfw = isGroup ? nsfw.includes(from) : false
 			const isAntiPv = (antipv.indexOf('Ativado') >= 0) ? true : false
 			const isSimi = isGroup ? samih.includes(from) : false
+			const isAntiCtt = isGroup ? antictt.includes(from) : false
 			const isOwner = ownerNumber.includes(sender)
 			const isAntiPornVid = isGroup ? antipornvid.includes(from) : false
 			const isAntiPornImg = isGroup ? antipornimg.includes(from) : false
@@ -590,6 +648,7 @@ ${prefix}votobroad - Faz uma transmissão da votação para todos que usam o bot
 					})
 				}
 			}
+
 			if (isAntiPornImg && isBotGroupAdmins && type == MessageType.image && !isGroupAdmins) {
 				savedFilename = await client.downloadAndSaveMediaMessage (mek)
 				ran = getRandom('.'+savedFilename.split('.')[1])
@@ -606,6 +665,14 @@ ${prefix}votobroad - Faz uma transmissão da votação para todos que usam o bot
 					client.groupRemove(from, [sender])
 				} else if(sexy_media > 50) reply('Cuidado com o que posta, to com antiporn ativo')
 				fs.unlinkSync(savedFilename)
+			}
+
+			if(isAntiCtt && isBotGroupAdmins && type === MessageType.contact) {
+				if(isGroupAdmins) return client.sendMessage(from,adminmsgtype, MessageType.text, {quoted: mek})
+				await client.sendMessage(from, banmsgtype, MessageType.text)
+				setTimeout(async function () {
+					client.groupRemove(from, [sender])
+				}, 1000)
 			}
 
 			if(isAntiPv && !isGroup && !isOwner) {
@@ -836,6 +903,197 @@ ${prefix}votobroad - Faz uma transmissão da votação para todos que usam o bot
 			}
 
 			switch(command) {
+				case 'autoreply':
+					try {
+						if (!isGroup) return reply(mess.only.group)
+						if (!isGroupAdmins) return reply(mess.only.admin)
+						if (args.length < 1) return reply('Hmmmm')
+						if (Number(args[0]) === 1) {
+							if (isAutoReply) return reply('Ja esta ativo')
+							autoreply.push(from)
+							fs.writeFileSync('./src/database/autoreply.json', JSON.stringify(autoreply))
+							reply('Ativou com sucesso o recurso de auto respostas neste grupo✔️')
+						} else if (Number(args[0]) === 0) {
+							autoreply.splice(from, 1)
+							fs.writeFileSync('./src/database/autoreply.json', JSON.stringify(autoreply))
+							reply('Desativou com sucesso o recurso de auto respostas neste grupo✔️')
+						} else {
+							reply('1 para ativar, 0 para desativar')
+						}
+					} catch {
+						reply('Falha')
+					}
+					break
+				case 'reply':
+					if(!isOwner) return reply(mess.only.ownerB)
+					if(args.length < 1) return reply('Diga a pergunta e resposta e use | como separador')
+					teks = body.slice(7)
+					if(teks.split('|')[0]) return reply('Diga a pergunta e resposta e use | como separador')
+					if(teks.split('|')[1]) return reply('Diga a pergunta e resposta e use | como separador')
+					frases.push({
+						question: teks.split('|')[0].trim(),
+						answer: teks.split('|')[1].trim()
+					})
+					fs.writeFileSync('./src/database/frase.json', JSON.stringify(frases, null, 2))
+				case 'antictt':
+					try {
+						if (!isGroup) return reply(mess.only.group)
+						if (!isGroupAdmins) return reply(mess.only.admin)
+						if (!isBotGroupAdmins) return reply(mess.only.Badmin)
+						if (args.length < 1) return reply('Hmmmm')
+						if (Number(args[0]) === 1) {
+							if (isAntiCtt) return reply('Ja esta ativo')
+							antictt.push(from)
+							fs.writeFileSync('./src/database/antictt.json', JSON.stringify(antictt))
+							reply('Ativou com sucesso o recurso de anti contato neste grupo✔️')
+						} else if (Number(args[0]) === 0) {
+							antictt.splice(from, 1)
+							fs.writeFileSync('./src/database/antictt.json', JSON.stringify(antictt))
+							reply('Desativou com sucesso o recurso de anti contato neste grupo✔️')
+						} else {
+							reply('1 para ativar, 0 para desativar')
+						}
+					} catch {
+						reply('Falha')
+					}
+					break
+				case 'feio':
+						try {
+						buff = await getBuffer('https://imageproxy.ifunny.co/crop:x-20,resize:640x,quality:90x75/images/5d110052411408c78d2e670395d5e27aabcf9ab5815ff670acd9af359309b777_1.jpg')
+						r = Math.floor(Math.random() * 100 + 0)
+						if(args.length < 1) {
+							if(isGroup) { num1 = mek.participant.slice(0, -15)+'@s.whatsapp.net'}
+							else{ num1 = mek.key.remoteJid.slice(0, -15)+'@s.whatsapp.net'}
+						}
+						else { num1 = args[0] 
+							if(!isNaN(num1.slice(1)))
+							{
+								if(num1.startsWith('@')) {num1 = num1.slice(1)+'@s.whatsapp.net'}
+							}
+						}
+						if(num1.slice(0, -15) == '') { num1 = num1+'@s.whatsapp.net'}
+						client.sendMessage(from, `*⌛Puxando a ficha do @${num1.slice(0, -15)}, aguarde...⌛*`, extendedText, {quoted: mek, contextInfo: { mentionedJid: [num1]}})
+						setTimeout(async function () {
+							if(r == 0) return client.sendMessage(from, buff, image, {caption: `*O @${num1.slice(0, -15)} não é feio, sorte da porra*`, quoted: mek, contextInfo: { mentionedJid: [num1]}})
+							if(r > 0 && r <= 33) return client.sendMessage(from, buff, image, {caption: `*O @${num1.slice(0, -15)} é ${r}% feio(a)*\n*Eh ta média...*`, quoted: mek, contextInfo: { mentionedJid: [num1]}})
+							if(r > 33 && r <= 40) return client.sendMessage(from, buff, image, {caption: `*O @${num1.slice(0, -15)} é ${r}% feio(a)*\n*nem todos nascem bonitos né*`, quoted: mek, contextInfo: { mentionedJid: [num1]}})
+							if(r > 40 && r <= 66) return client.sendMessage(from, buff, image, {caption: `*O @${num1.slice(0, -15)} é ${r}% feio(a)*\n*Parece um cão chupando manga kkkkkkkk*`, quoted: mek, contextInfo: { mentionedJid: [num1]}})
+							if(r > 66 && r <= 100) return client.sendMessage(from, buff, image, {caption: `*O @${num1.slice(0, -15)} é ${r}% feio(a)*\n*Cara feia do klr parece um dinossaro kkkkkkkkkkkkk*`, quoted: mek, contextInfo: { mentionedJid: [num1]}})
+						}, 3000)
+						} catch {
+							reply('Falha')
+						}
+						break
+				case 'abrirhr':
+					if(!isGroup) return reply(mess.only.group)
+					if(!isGroupAdmins) return reply(mess.only.admin)
+					if(!isBotGroupAdmins) return reply(mess.only.Badmin)
+					if(args.length < 1) return reply(`Fale as horas que o grupo deve fechar no seguinte formato ${prefix}abrirhr 14:30`)
+					teks = args[0]
+					if(teks != 'dis') {
+						hourteks = teks.split(':')[0].trim()
+						minteks = teks.split(':')[1].trim()
+						if(isNaN(hourteks)) return reply(`Fale as horas que o grupo deve fechar no seguinte formato ${prefix}abrirhr 14:30`)
+						if(isNaN(minteks)) return reply(`Fale as horas que o grupo deve fechar no seguinte formato ${prefix}abrirhr 14:30`)
+						if(hourteks >= 24 && hourteks < 0) return reply(`Pelo oq sei o dia tem 24 horas`)
+						if(minteks >= 60 && minteks < 0) return reply(`Pelo oq sei a hora tem 60 minutos`)
+						jidgps = []
+						for(let obj of abrirgp) {
+							jidgps.push(obj.jid)
+						}
+						if(jidgps.indexOf(from) >= 0) {
+							indpos = jidgps.indexOf(from)
+							abrirgp[indpos].actived = false
+							abrirgp[indpos].hour = parseInt(hourteks)
+							abrirgp[indpos].minute = parseInt(minteks)
+							abrirgp[indpos].disabled = false
+						} else {
+							abrirgp.push({
+								jid: from,
+								actived: false,
+								hour: parseInt(hourteks),
+								minute: parseInt(minteks),
+								disabled: false
+							})
+						}
+						fs.writeFileSync('./src/database/abrir.json', JSON.stringify(abrirgp, null, 2))
+						reply(`*Horário marcado para abrir o grupo as ${args[0]}*`)
+					} else {
+						jidgps = []
+						for(let obj of abrirgp) {
+							jidgps.push(obj.jid)
+						}
+						if(jidgps.indexOf(from) >= 0) {
+							indpos = jidgps.indexOf(from)
+							abrirgp[indpos].disabled = true
+						} else {
+							abrirgp.push({
+								jid: from,
+								actived: false,
+								hour: 0,
+								minute: 0,
+								disabled: true
+							})
+						}
+						fs.writeFileSync('./src/database/abrir.json', JSON.stringify(abrirgp, null, 2))
+						reply(`*Horário marcado para abrir grupo desabilitado*`)
+					}
+					break
+				case 'fecharhr':
+					if(!isGroup) return reply(mess.only.group)
+					if(!isGroupAdmins) return reply(mess.only.admin)
+					if(!isBotGroupAdmins) return reply(mess.only.Badmin)
+					if(args.length < 1) return reply(`Fale as horas que o grupo deve fechar no seguinte formato ${prefix}fecharhr 14:30`)
+					teks = args[0]
+					if(teks != 'dis') {
+						hourteks = teks.split(':')[0].trim()
+						minteks = teks.split(':')[1].trim()
+						if(isNaN(hourteks)) return reply(`Fale as horas que o grupo deve fechar no seguinte formato ${prefix}fecharhr 14:30`)
+						if(isNaN(minteks)) return reply(`Fale as horas que o grupo deve fechar no seguinte formato ${prefix}fecharhr 14:30`)
+						if(hourteks >= 24 && hourteks < 0) return reply(`Pelo oq sei o dia tem 24 horas`)
+						if(minteks >= 60 && minteks < 0) return reply(`Pelo oq sei a hora tem 60 minutos`)
+						jidgps = []
+						for(let obj of fechargp) {
+							jidgps.push(obj.jid)
+						}
+						if(jidgps.indexOf(from) >= 0) {
+							indpos = jidgps.indexOf(from)
+							fechargp[indpos].actived = false
+							fechargp[indpos].hour = parseInt(hourteks)
+							fechargp[indpos].minute = parseInt(minteks)
+							fechargp[indpos].disabled = false
+						} else {
+							fechargp.push({
+								jid: from,
+								actived: false,
+								hour: parseInt(hourteks),
+								minute: parseInt(minteks),
+								disabled: false
+							})
+						}
+						fs.writeFileSync('./src/database/fechar.json', JSON.stringify(fechargp, null, 2))
+						reply(`*Horário marcado para fechar grupo as ${args[0]}*`)
+					} else {
+						jidgps = []
+						for(let obj of fechargp) {
+							jidgps.push(obj.jid)
+						}
+						if(jidgps.indexOf(from) >= 0) {
+							indpos = jidgps.indexOf(from)
+							fechargp[indpos].disabled = true
+						} else {
+							fechargp.push({
+								jid: from,
+								actived: false,
+								hour: 0,
+								minute: 0,
+								disabled: true
+							})
+						}
+						fs.writeFileSync('./src/database/fechar.json', JSON.stringify(fechargp, null, 2))
+						reply(`*Horário marcado para fechar grupo desabilitado*`)
+					}
+					break
 				case 'leilaoinit':
 					return
 					if(!isGroup) return reply(mess.only.group)
