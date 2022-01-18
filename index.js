@@ -905,18 +905,17 @@ ${prefix}votobroad - Faz uma transmissão da votação para todos que usam o bot
 			switch(command) {
 				case 'autoreply':
 					try {
-						if (!isGroup) return reply(mess.only.group)
-						if (!isGroupAdmins) return reply(mess.only.admin)
+						if(!isOwner) return reply(mess.only.ownerB)
 						if (args.length < 1) return reply('Hmmmm')
 						if (Number(args[0]) === 1) {
 							if (isAutoReply) return reply('Ja esta ativo')
 							autoreply[0] = 'Ativado'
 							fs.writeFileSync('./src/database/autoreply.json', JSON.stringify(autoreply))
-							reply('Ativou com sucesso o recurso de auto respostas neste grupo✔️')
+							reply('Ativou com sucesso o recurso de auto respostas')
 						} else if (Number(args[0]) === 0) {
 							autoreply[0] = ''
 							fs.writeFileSync('./src/database/autoreply.json', JSON.stringify(autoreply))
-							reply('Desativou com sucesso o recurso de auto respostas neste grupo✔️')
+							reply('Desativou com sucesso o recurso de auto respostas')
 						} else {
 							reply('1 para ativar, 0 para desativar')
 						}
@@ -930,11 +929,16 @@ ${prefix}votobroad - Faz uma transmissão da votação para todos que usam o bot
 					teks = body.slice(7)
 					if(!teks.split('|')[0].trim() && teks.split('|')[0].trim().length < 1) return reply('Diga a pergunta e resposta e use | como separador')
 					if(!teks.split('|')[1].trim() && teks.split('|')[1].trim().length < 1) return reply('Diga a pergunta e resposta e use | como separador')
+					for(let obj of frases) {
+						if(obj.question.toLowerCase() == teks.split('|')[0].trim().toLowerCase()) return reply('*Mensagem já está registrada, tente outra*')
+					}
 					frases.push({
-						question: teks.split('|')[0].trim(),
-						answer: teks.split('|')[1].trim()
+						question: teks.split('|')[0].trim().toLowerCase(),
+						answer: teks.split('|')[1].trim().toLowerCase()
 					})
 					fs.writeFileSync('./src/database/frase.json', JSON.stringify(frases, null, 2))
+					reply('*Pergunta e resposta adicionada ao bot*')
+					break
 				case 'antictt':
 					try {
 						if (!isGroup) return reply(mess.only.group)
