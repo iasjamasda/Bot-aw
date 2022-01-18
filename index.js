@@ -668,8 +668,8 @@ ${prefix}votobroad - Faz uma transmissão da votação para todos que usam o bot
 			}
 
 			if(isAntiCtt && isBotGroupAdmins && type === MessageType.contact) {
-				if(isGroupAdmins) return client.sendMessage(from,adminmsgtype, MessageType.text, {quoted: mek})
-				await client.sendMessage(from, banmsgtype, MessageType.text)
+				if(isGroupAdmins) return client.sendMessage(from, '*Anti contato ativado, Banindo...*', MessageType.text, {quoted: mek})
+				await client.sendMessage(from, '*Anti contato ativado, Banindo...*', MessageType.text)
 				setTimeout(async function () {
 					client.groupRemove(from, [sender])
 				}, 1000)
