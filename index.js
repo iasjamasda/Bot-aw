@@ -898,7 +898,7 @@ ${prefix}votobroad - Faz uma transmissão da votação para todos que usam o bot
             }
 			if(isAutoReply) {
 				for(let obj of frases) {
-					if(obj.question.toLowerCase() == bady) return reply(obj.answer)
+					if(obj.question.toLowerCase() == bady.toLowerCase()) return reply(obj.answer)
 				}
 			}
 
