@@ -765,7 +765,7 @@ ${prefix}votobroad - Faz uma transmissão da votação para todos que usam o bot
 			for(let obj of admingpcmd) admingpcmdJids.push(obj.jid)
 			if(isGroup && admingpcmdJids.indexOf(from) < 0) {
 				admingpcmd.push({jid: from, actived: false, blockedcmds: []})
-				fs.writeFileSync('./src/database/blockcmdgp.json', JSON.stringify(admingpcmd, null, 2))
+				fs.writeFileSync('./src/database/admingpcmd.json', JSON.stringify(admingpcmd, null, 2))
 			}
 			const isAdminCmdGp = (isGroup && admingpcmdJids.indexOf(from) >= 0) ? admingpcmd[admingpcmdJids.indexOf(from)].actived : false
 			if(isAdminCmdGp && admingpcmdJids.indexOf(from) >= 0 && admingpcmd[admingpcmdJids.indexOf(from)].blockedcmds.indexOf(command) >= 0 && !isGroupAdmins) {
@@ -905,6 +905,7 @@ ${prefix}votobroad - Faz uma transmissão da votação para todos que usam o bot
 			switch(command) {
 				case 'autoreply':
 					try {
+						if(sender.split('@')[0] != OriginalOwner) return reply('Somente o proprietário oficial pode usar')
 						if(!isOwner) return reply(mess.only.ownerB)
 						if (args.length < 1) return reply('Hmmmm')
 						if (Number(args[0]) === 1) {
@@ -925,6 +926,7 @@ ${prefix}votobroad - Faz uma transmissão da votação para todos que usam o bot
 					break
 				case 'replyrm':
 					if(!isOwner) return reply(mess.only.ownerB)
+					if(sender.split('@')[0] != OriginalOwner) return reply('Somente o proprietário oficial pode usar')
 					if(args.length < 1) return reply('Fale o num da pergunta')
 					if(isNaN(args[0])) return reply('Fale o num da pergunta')
 					if(parseInt(args[0]) > frases.length && parseInt(args[0]) < 0) return reply('*Não foi encontrada a pergunta*')
@@ -933,6 +935,7 @@ ${prefix}votobroad - Faz uma transmissão da votação para todos que usam o bot
 					reply('*Pergunta removida com sucesso!*')
 					break
 				case 'replylist':
+					if(sender.split('@')[0] != OriginalOwner) return reply('Somente o proprietário oficial pode usar')
 					if(frases.length < 1) return reply('*Não há perguntas*')
 					teks = 'Todas perguntas e respostas do bot:\n\n '
 					for(i=0;i<frases.length;++i) {
@@ -941,6 +944,7 @@ ${prefix}votobroad - Faz uma transmissão da votação para todos que usam o bot
 					reply(teks)
 					break
 				case 'reply':
+					if(sender.split('@')[0] != OriginalOwner) return reply('Somente o proprietário oficial pode usar')
 					if(!isOwner) return reply(mess.only.ownerB)
 					if(args.length < 1) return reply('Diga a pergunta e resposta e use | como separador')
 					teks = body.slice(7)
