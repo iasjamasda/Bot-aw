@@ -1,12 +1,11 @@
 const help = (prefix) => {
-	return `💎 • Comandos da BOT-SOPHIA• 💎  
+	return `💎 • COMANDOS DA BOT SOPHIA • 💎  
 
 👅 AUTO RESPOSTAS 👅
 
 ❑ .autoreply ❑
 Função: ativa respostas automaticas no grupo
-Como Usar: .autoreply 1 para ativar e .autoreply 0 para desativar
-Obs: Este comando pode ser usado se você for um administrador
+Como Usar: .autoreply 1 para ativar 
 
 ❑ .reply ❑
 Função: Programa uma nova mensagem de pergunta e resposta
@@ -18,7 +17,7 @@ Como Usar: .replylist
 
 ❑ .replyrm ❑
 Função: Remove uma mensagem automatica de acordo com a posição
-Como Usar: .replyrm num
+Como Usar: .replyrm + número da mensagem
 
 🌈 TTPs 🌈
 
@@ -46,9 +45,6 @@ Como Usar: Envie .ttp5 + O Texto que você quer transformar em figurinha
 Função: converte texto em um figurinha
 Como Usar: Envie .ttp6 + O Texto que você quer transformar em figurinha
 
-❑ .attp ❑
-Função: converte texto em um figurinha
-Como Usar: Envie .attp + O Texto que você quer transformar em figurinha
 
 ❑ .attp2 ❑
 Função: converte texto em um figurinha
@@ -77,114 +73,112 @@ Como Usar: Envie .attp7 + O Texto que você quer transformar em figurinha
 🔮 HORÓSCOPO 🔮
 
 ❑ .signos ❑
-Função: Mostra lista de signos e os número pra usar nos comandos
+Função: Mostra lista de signos e os número pra usar no .horoshoje
 
 ❑ .horoshoje ❑
-Função: Mostra o horóscopo de hoje de acordo com o signo
-Como Usar: .horoshoje (num do signo)
+Função: Mostra o horóscopo de acordo com o signo
+Como Usar: Envie .horoshoje + o número do signo
 
-❑ .horosemana ❑
-Função: Mostra o horóscopo da semana de acordo com o signo
-Como Usar: .horoshoje (num do signo)
 
 🥇 SISTEMA DE NIVEIS 🥇
 
 ❑ .level ❑
-Função: Consulta o seus dados ou de outras pessoas
-Como Usar: .level (marque alguém ou n/a)
+Função: Consulta sua interação ou de outra pessoa no grupo
+Como Usar: Envie .level 
 
 ⚙️ BLOQUEIO DE COMANDOS DE GRUPO ⚙️
 
 ❑ .blockgpcmd ❑
 Função: Ativa o bloqueio de comandos no grupo
-Como Usar: .blockgpcmd 1/0
+Como Usar: .blockgpcmd 1
 
 ❑ .addblockgpcmd ❑
-Função: Bloqueia o comando no grupo
-Como Usar: .addblockgpcmd (cmd)
+Função: Bloqueia o comando para todos no grupo
+Como Usar: .addblockgpcmd + Comando sem prefixo
 
 ❑ .rmblockgpcmd ❑
 Função: Desbloqueia o comando no grupo
-Como Usar: .rmblockgpcmd (cmd)
+Como Usar: .rmblockgpcmd + Comando sem prefixo
 
 ❑ .blockgpcmdlist ❑
-Função: Lista comandos bloqueados no grupo
+Função: Lista comandos bloqueados para todos no grupo
 
 ❑ .admingpcmd ❑
 Função: Ativa o bloqueio de comandos no grupo
-Como Usar: .blockgpcmd 1/0
+Como Usar: .blockgpcmd 1
 
 ❑ .addadmingpcmd ❑
-Função: Bloqueia o comando no grupo
-Como Usar: .addblockgpcmd (cmd)
+Função: Restringe um comando somente para ADMs
+Como Usar: .addblockgpcmd + Comando sem prefixo
 
 ❑ .rmadmingpcmd ❑
 Função: Desbloqueia o comando no grupo
-Como Usar: .rmblockgpcmd (cmd)
+Como Usar: .rmblockgpcmd + comando sem prefixo
 
 ❑ .admingpcmdlist ❑
-Função: Lista comandos bloqueados no grupo 
+Função: Mostra comandos restritos para ADMs
 
 👤 ATIVIDADE DE MEMBROS 👤
 
 ❑ .clearativoadmin ❑
-Função: Limpa a lista a atividade dos adms do grupo
+Função: Limpa a lista a atividade dos ADMs do grupo
 
 ❑ .ativoadmin ❑
-Função: Lista a atividade dos adms do grupo
+Função: Mostra o quanto os ADMs participam do grupo
 
 ❑ .rankativo ❑
-Função: Rankea pessoas mais ativas do grupo
+Função: Mostra o top 3 dos membros mais participativos do grupo
 
 ❑ .checkativo ❑
-Função: Consulta a atividade de um membro do grupo
+Função: Mostra o quanto um membro participa do grupo
 Como Usar: .checkativo (marque alguém)
 
 ❑ .atividade ❑
 Função: Lista a atividade de todos os membros do grupo
 
 ❑ .banativos ❑
-Função: Bane membros de uma certa qnt pra baixo
-Como Usar: .banativos (qnt de msg)
+Função: Bane membros inativos
+NÃO USE ESTE COMANDO
 
-❑ .filtroativo ❑
-Função: Filtra atividades de membros de uma certa qnt pra baixo
-Como Usar: .filtroativo (qnt de msg)
+
+❑ .filtroativo 0 ❑
+Função: Mostra todos os zerados do grupo
+Como Usar: Envie o comando no grupo
 
 🔥 ❑ COMANDOS PARA FIGURINHAS ❑ 🔥 
 
-❑ .sticker ou .stiker ❑
-Função: converter imagem / gif / vídeo de até 6 segundos em figurinhas grandes
-Como Usar: Envie a imagem,gif ou vídeo marque ele e responda com o comando .sticker
+❑ .sticker ❑
+Função: Faz figurinhas grandes com vídeos e Gifs de até 6 seg
+Como Usar: Envie a imagem,gif ou vídeo marque ele e responda com o comando 
 
-❑ .nsticker ou .nstiker ❑
-Função: converter imagem / gif / vídeo de até 6 segundos em figurinhas com nome de autor e pacote
+❑ .nsticker ❑
+Função: Faz figurinhas com vídeos/gifs de 6 seg com nome de autor e pacote
 Como Usar: Envie a imagem,gif ou vídeo marque e responda com o comando .nsticker autor | pacote
 
 ❑ .rename ❑
 Função: Troca o nome de pacote e autor da figurinha
-Como Usar: Responda a figurinha com .rename pacote | autor
+Como Usar: Responda a figurinha com .rename seu nome | seu nome
 
-❑ .fsticker ou .fstiker ❑
-Função: converter imagem / gif / vídeo em figurinha sem alterar o tamanho
-Como Usar: Envie a imagem,gif ou vídeo marque ele e responda com o comando .fsticker
+❑ .fsticker ❑
+Função: Faz figurinhas com fotos, vídeos e gifs de até 6 seg
+Como Usar: Envie o gif e responda com o comando
 
-❑ .togif ou .togif ❑
-Função: converter sticker em gif
-Como Usar: Envie um sticker marque ele e responda com o comando .togif
+❑ .togif ❑
+Função: converte figurinha animada em GIF
+Como Usar: Envie um sticker marque ele e responda com o comando
 
 🎧 COMANDOS DE ÁUDIO/MÚSICAS 🎧
 
 ❑ .ytsrc ❑
-Função: Manda uma mensagem lista com músicas referentes
-Como Usar: .ytsrc palavra chave
+Função: Envia lista de músicas encontradas para baixar
+Como Usar: .ytsrc + nome da música
 
 ❑ .play ❑
 Função: procura e baixa músicas do youtube
 Como Usar: .play + o título exato do vídeo que você quer a música
 
 ❑ .playv2 ❑
-Função: procura e baixa músicas do youtube
+Função: Baixa músicas do youtube
 Como Usar: .playv2 + o título exato do vídeo que você quer a música
 
 ❑ .ytmp3 ❑
@@ -199,7 +193,7 @@ Como Usar: Envie .ytmp4 + link do vídeo
 
 ❑ .toimg ❑
 Função: converter figurinhas paradas em imagem no tamanho real
-Como Usar: Envie uma figurinha que não seja animada e responda ela com o comando .toimg
+Como Usar: Envie uma figurinha e responda ela com o comando
 
 📱 COMANDOS DE MÍDIA 📱
 
@@ -208,32 +202,25 @@ Função: Converte e redimensiona gifs e vídeos
 Como Usar: Envie um gif ou vídeo e responda com o comando .resizevid + largura e altura que deseja 
 Ex: .resizevid 512 512
 
-❑ Comando: .criador ❑
+❑ .criador ❑
 Função: Envia o contato do proprietário do BOT
 Como Usar: Envie .criador
 
 🔥 Sistema de voto 🔥
 
-❑ Comando: .gpvotohelp ❑
+(PARA USAR FALE COM O DONO DO BOT)
+
+❑ .gpvotohelp ❑
 Função: Envia o menu de ajuda nos comando de voto no grupo
 
-❑ Comando: .votohelp ❑
+❑ .votohelp ❑
 Função: Envia o menu de ajuda nos comando de voto geral
 
-🔥 Memes 🔥
-
-❑ .meme ❑
-Função: Envia imagens aleatórias de memes em inglês
-Como usar: Envie .meme
-
-❑ .memeindo ❑
-Função: Envia imagens aleatórias de memes Indonésios
-Como usar: Envie .memeindo
 
 🔥 Comandos Para Administradores & Proprietários do BOT 🔥
 
 ❑ .block ❑
-Função: Impede que o número bloqueado use os comandos do BOT
+Função: Proibe um número de usar o BOT
 Como Usar: Envie .block + o número sem traços e sem sinais
 Ex: .block 5521982882464
 
@@ -245,25 +232,16 @@ Como Usar: Envie .blacklist
 Função: desbloqueia o número para poder usar o BOT
 Como Usar: .unblock 5521982882464
 
-❑ .groupack ❑
-Função: Ative no grupo para a figurinha ter nome no pacote
-Como Usar: Envie .groupack 1 ou .groupack 0 Se quiser desativar
-
-❑ .changepack ❑
-Função: muda o nome do pacote
-Como Usar: Envie .changepack + o nome que deseja no pacote da figurinha
 
 🔥 COMANDOS EXCLUSIVOS PARA PROPRIETÁRIOS 🔥
 
 ❑ .antipornimg ❑
 Função: ativa o anti porno de imagens
-Como Usar: .antipornimg 1 para ativar e .antipornimg 0 para desativar
-Obs: Este comando pode ser usado se você for um administrador
+Como Usar: .antipornimg 1 para ativar 
 
 ❑ .antipornvid ❑
 Função: ativa o anti porno de vídeos
-Como Usar: .antipornvid 1 para ativar e .antipornvid 0 para desativar
-Obs: Este comando pode ser usado se você for um administrador
+Como Usar: .antipornvid 1 para ativar 
 
 ❑ .durpornvid ❑
 Função: duração do corte do anti porno de videos
@@ -272,41 +250,40 @@ Obs: Este comando pode ser usado se você for um proprietário do bot
 
 ❑ .antipv ❑
 Função: ativa o bloqueamento de pessoas que invade pv do bot
-Como Usar: .antipv 1 para ativar e .antipv 0 para desativar
 Obs: Este comando pode ser usado se você for um proprietário do bot
 
 ❑ .antictt ❑
-Função: ativa o bloqueamento mensagens contato
-Como Usar: .antictt 1 para ativar e .antictt 0 para desativar
-Obs: Este comando pode ser usado se você for um administrador
+Função: Banir quem enviar ctt no grupo
+Como Usar: .antictt 1 para ativar 
 
 ❑ .welcomeadd ❑
 Função: Modifica a mensagem de boas-vindas de um membro
-Como Usar: .welcomeadd mensagem
+(PARA USAR FALE COM O PROPRIETÁRIO DO BOT)
 
 ❑ .byeadd ❑
 Função: Modifica a mensagem de saída de um membro
-Como Usar: .welcomeadd mensagem
+(PARA USAR FALE COM O DONO DO BOT)
 
 ❑ .welcomehelp ❑
-Função: lista as variáveis dos comandos de saída e boas-vindas
+(PARA USAR FALE COM O DONO DO BOT)
 
 ❑ .addowner ❑
 Função: Adiciona um número aos proprietário
-Como Usar: .addowner (número sem +, - e espaço)
+(PROIBIDO O USO DESTE COMANDO)
 
 ❑ .rmowner ❑
 Função: Remove um número dos proprietário
-Como Usar: .rmowner (número sem +, - e espaço)
+(PROIBIDO O USO DESTE COMANDO)
 
 🔥 Brincadeiras 🔥
 
 ❑ .randomship ❑
 Função: shippa duas pessoas aleatoriamente
+Como usar: .randomship + marque 1 pessoa
 
 ❑ .ship ❑
 Função: Mostra a probabilidade de namoro
-Como usar: .ship (marcar1) (marcar2)
+Como usar: Envie .ship e marque duas pessoas
 
 ❑ .gay ❑
 Função: O Bot diz quanto porcento um membro do grupo é gay
@@ -339,16 +316,10 @@ Exemplo: .gtts pt BOA TARDE
 
 ❑ .signome ❑
 Função: Mostra o significado do seu nome
-Como usar: Envie .signome + o nome que deseja saber o significado
-Exemplo: .signome Sophia
-
-❑ .url2img ❑
-Função: tirar um print de uma página da internet
-Como Usar: Envie .url2img + dispositivo que você está usando + Link da página
-Ex: .url2img desktop https://www.google.com.br/
+Como usar: Envie .signome + o nome
 
 ❑ .simi ❑
-Função: sua mensagem será respondida por um robô virtual Simi
+Função: sua mensagem será respondida por um robô virtual 
 Como Usar: .simi + sua mensagem
 
 ❑ .ocr ❑
@@ -357,7 +328,7 @@ Como Usar: Envie uma imagem e escreva na legenda o comando .ocr
 
 ❑ .wait ❑
 Função: Pesquisa o anime de uma imagem
-Como Usar: responder imagem ou enviar imagem com legenda 
+Como Usar: Envie a imagem e responda com o comando
 
 ❑ .setprefix ❑
 Função: substituir prefixo
@@ -368,7 +339,7 @@ Exemplo: .setprefix ?
 
 ❑ .del ou delete ❑
 Função: Deleta mensagem do bot para todos
-Como Usar: responda a imagem com o comando
+Como Usar: responda a mensagem do BOT com o comando
 
 ❑ .abrirgp ❑
 Função: Abre o grupo para todos
@@ -386,28 +357,25 @@ Função: Fecha o grupo para todos em determinado horário
 
 ❑ .dontback ❑
 Função: Impede que determinado número entre no grupo
-Como Usar: Envie .dontback 1 para ativar e .dontback 0 para desativar
-Obs: Este comando só pode ser usado pelos administradores do grupo
+Como Usar: Envie .dontback 1 para ativar 
 
 ❑ .dbackadd ❑
 Função: Adiciona um número na lista dontback do grupo para que o mesmo não consiga entrar no grupo
 Como Usar: Envie .dbackadd + o número sem traços e sem sinais
-Obs: Este comando pode ser usado se você for um administrador do grupo 
 
 ❑ .dbackrm ❑
 Função: Remove um número da lista dont back do grupo
 Como Usar: .dbackrm + o número
-Obs: Este comando pode ser usado se você for um administrador do grupo
 
 ❑ .dbacklist ❑
-Função: Mostra a lista de dontback do grupo
+Função: Mostra a lista de números proibidos no grupo
 
 ❑ .ban ❑
 Função: Bane respondendo a mensagem de uma pessoa no grupo
 Como usar: Responda a mensagem de alguém com o comando .ban
 
 ❑ .cheguei ❑
-Função: o bot te responde de acordo com sua hierarquia no gp
+Função: o bot responde de acordo com sua hierarquia no gp
 
 ❑ .listonline ❑
 Função: lista os membros que estão online
@@ -424,43 +392,34 @@ Como Usar: .rmpalavra + a palavra que está proibida
 Função: Mostra a lista de palavras proibidas no grupo
 
 ❑ .antipalavra ❑
-Função: Ativa o modo anti palavra do grupo
-Como Usar: .antipalavra 1 para ativar o modo antipalavra e .antipalavra 0 para desativar o modo antipalavra
-Obs: Este comando pode ser usado se você for um administrador do grupo
+Função: Bane quem citar palavras proibidas no grupo
+Como Usar: .antipalavra 1 para ativar o modo antipalavra
 
 ❑ .antifake ❑
-Função: Ative para impedir que números estrangeiros e fakes entrem no grupo
-Como Usar: Envie .antifake 1 para ativar o modo antifake e .antifake 0 para desativar o modo antifake
-Obs: Este comando pode ser usado se você for um administrador do grupo 
-
+Função: Impede que números gringos entrem no grupo
+Como Usar: Envie .antifake 1 para ativar o modo antifake 
 
 ❑ .welcome ❑
-Função: Ative para enviar mensagem de boas vindas para quem entrar no grupo (Funciona somente no grupo oficial)
-Como Usar: Envie .welcome 1 para ativar o modo welcome e .welcome 0 para desativar o modo welcome
-Obs: Este comando pode ser usado se você for um administrador do grupo
+Como usar: Envie .welcome 1 Para o BOT dar boas vindas para quem entrar no grupo. (PARA USAR FALE COM O DONO DO BOT)
 
-❑ Comando .leave ❑
+❑ .leave ❑
 Função: faz o bot sair do grupo
 Obs: Somente adms pode usar esse comando
 
 ❑ .linkgroup ❑
-Função: pegue o link do grupo
+Função: Envia o link do grupo
 Como Usar: basta enviar o comando
-Obs: só pode ser usado quando o bot se torna admin, e quem enviar o comando tem que ser admin
 
 ❑ .hidemarcar  ❑
-Função: marca todos os membros do grupo e não aparece o nome de ninguém
-Obs: Este comando pode ser usado se você for um administrador do grupo 
+Função: marca todos os membros do grupo de forma invisível
 
 ❑ .tagall ❑
-Função: marca todos os membros do grupo, incluindo administradores também
+Função: marca todos os membros do grupo
 Como Usar: basta enviar o comando .tagall
-Obs: Este comando pode ser usado se você for um administrador do grupo 
 
 ❑ .simih ❑
-Função: ative o modo simi no grupo
-Como Usar: .simih 1 para ativar o modo simih e o BOT irá responder aleatoriamente as mensagens e .simih 0 para desativar o modo simih
-Obs: Este comando pode ser usado se você for um administrador do grupo`
+Função: ativa respostas automáticas do BOT
+Como Usar: .simih 1 para ativar o modo simih e o BOT irá responder aleatoriamente as mensagens e .simih 0 para desativar`
 }
 
 exports.help = help

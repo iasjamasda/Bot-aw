@@ -1605,6 +1605,7 @@ ${prefix}votobroad - Faz uma transmissão da votação para todos que usam o bot
 				break
 				case 'togif':
 					if ((isMedia && mek.message.videoMessage.seconds < 20 || isQuotedVideo && mek.message.extendedTextMessage.contextInfo.quotedMessage.videoMessage.seconds < 20)) {
+						reply('*PACIÊNCIA, ESSE PROCESSO É UM POUCO DEMORADO 😴*')
 						const encmedia = isQuotedVideo ? JSON.parse(JSON.stringify(mek).replace('quotedM','m')).message.extendedTextMessage.contextInfo : mek
 						const media = await client.downloadAndSaveMediaMessage(encmedia)
 						ran = getRandom('.mp4')
@@ -1615,6 +1616,7 @@ ${prefix}votobroad - Faz uma transmissão da votação para todos que usam o bot
 							fs.unlinkSync(ran)
 						})
 					} else if(isQuotedSticker){
+						reply('*PACIÊNCIA, ESSE PROCESSO É UM POUCO DEMORADO 😴*')
 						const encmedia = isQuotedSticker ? JSON.parse(JSON.stringify(mek).replace('quotedM','m')).message.extendedTextMessage.contextInfo : mek
 						const media = await client.downloadAndSaveMediaMessage(encmedia)
 						buff = await stickerForVideo(media)
